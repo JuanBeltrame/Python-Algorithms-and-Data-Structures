@@ -255,33 +255,15 @@ def altamodelo():
 def mostrarmodelo(m): 
 	print("Modelo: ", m.mod,"  Coeficiente: ", m.coef,)
 
-	
+#----------------------------- CALCULOS -----------------------------------------	
 # Procedimiento que calcula los promedios pedidos en enunciado con los valores de prueba	
 def calculoprom(prome,pos,fil,col):
 	#for i in range(7):
 	prome[pos]=prome[pos] + l.Vp[fil][col]
-
-		
-		
+	
 # función que determina si un lote es descartado, según condición dada en enunciado
 def descarto(p,cf):
 	return ((p[0] > cf) and (p[1] > cf)) or ((p[0] > cf) and (p[2] > cf)) or ((p[1] > cf) and (p[2] > cf)) 
-
-# Altas (ingreso de informacion) en archivo Descarte.dat
-def altadescarte(c):
-	global afdes, ades
-	armoregd(prom,c)
-	ades.seek(0,2)
-	pickle.dump(d,ades)
-	ades.flush()
-	print("alta exitosa en descarte.dat")
-	print(d.nl," ",d.vr)
-	tec=input()
-
-# inicializacion en cero, al arreglo Prom (acumulacion y calculo de promedios pedidos)
-def inicializo(prome):
-	for i in range(3):
-		prome[i]=0.00
 
 # Realiza los calculos que se solicitan en enunciado para descartar los lotes, y armar el archivo descarte
 def calculos():
@@ -301,6 +283,25 @@ def calculos():
 		if coeficiente != -1:
 			if descarto(prom,coeficiente)==True:
 				altadescarte(coeficiente)
+
+
+# Altas (ingreso de informacion) en archivo Descarte.dat
+def altadescarte(c):
+	global afdes, ades
+	armoregd(prom,c)
+	ades.seek(0,2)
+	pickle.dump(d,ades)
+	ades.flush()
+	print("alta exitosa en descarte.dat")
+	print(d.nl," ",d.vr)
+	tec=input()
+
+# inicializacion en cero, al arreglo Prom (acumulacion y calculo de promedios pedidos)
+def inicializo(prome):
+	for i in range(3):
+		prome[i]=0.00
+
+
 
 # Litado solicitado, recorriendo el archivo de descarte.dat
 def listado():

@@ -1,9 +1,10 @@
 # ejemplo presentación en PowerPoint Archivos Alumnos
-
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 import os
 import pickle
 import os.path
 
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 class Alumno:
     def __init__(self):  # constructor dentro de la clase Alumno
         self.legajo = 0
@@ -14,22 +15,7 @@ class Alumno:
         self.promedio = 0.00
         self.baja= " "
 
-def validarChar(l1,l2,l3,l4):
-    letra = input("Ingrese Carrera:  S- Sistemas   Q- Quimica  M-Mecanica   C-Civil: : ").upper()
-    while (letra !=l1) and (letra !=l2) and (letra !=l3) and (letra !=l4):
-        letra = input("Ingrese Carrera:  S- Sistemas   Q- Quimica  M-Mecanica   C-Civil: : ").upper()
-    return letra
  
-def validaRangoEntero(nro, min,max):
-    try:              
-        nro = int(nro)      
-        if nro >= min and nro <= max:
-            return False 
-        else:
-            return True  
-    except:
-        return True  
-    
 def formatearAlumno(vrAlu): # vrAlu parámetro formal
     vrAlu.legajo= str(vrAlu.legajo)
     vrAlu.legajo= vrAlu.legajo.ljust(5, ' ')     
@@ -83,52 +69,7 @@ def ordenaAlumnosxLeg():  #ordena por campo legajo
                 pickle.dump(auxi, ArcLogAlu)
                 ArcLogAlu.flush()
 
-def BuscaSec(Leg, vrAlu):
-    global ArcFisiAlu, ArcLogAlu
-    t = os.path.getsize(ArcFisiAlu)
-    pos=0
-    ArcLogAlu.seek(0, 0)  
-    if t>0:
-        vrAlu = pickle.load(ArcLogAlu)
-        while (ArcLogAlu.tell()<t) and (int(Leg) != int(vrAlu.legajo)):
-            pos = ArcLogAlu.tell()
-            vrAlu = pickle.load(ArcLogAlu)
-        if int(vrAlu.legajo) == int(Leg):        
-         return pos
-        else:
-         return -1
-    else:
-        print('-----------------')
-        print("Archivo sin datos")
-        print('-----------------')
-        return -1
 
-def BusquedaDico(Leg):
-    # Método de búsqueda dicotómica
-    global ArcFisiAlu, ArcLogAlu
-    ArcLogAlu.seek(0, 0)
-    aux = pickle.load(ArcLogAlu)
-    tamReg = ArcLogAlu.tell()
-    cantReg = int(os.path.getsize(ArcFisiAlu) / tamReg)
-    inferior = 0
-    superior = cantReg - 1
-    medio = (inferior + superior) // 2
-    ArcLogAlu.seek(medio * tamReg, 0)
-    RegAlu = pickle.load(ArcLogAlu)
-    
-    while int(RegAlu.legajo) != Leg and (inferior < superior):
-        if Leg < int(RegAlu.legajo):
-            superior = medio - 1
-        else:
-            inferior = medio + 1
-        medio = (inferior + superior) // 2
-        ArcLogAlu.seek(medio * tamReg, 0)
-        RegAlu = pickle.load(ArcLogAlu)
-    
-    if int(RegAlu.legajo) == Leg:
-        return medio * tamReg
-    else:
-        return -1
 
 def BajaLogica():
     global ArcLogAlu
@@ -330,33 +271,90 @@ def ListaAlumnos():
             print(RegAlu.legajo,"  ",RegAlu.nombre, "  ", RegAlu.comision,"       ",RegAlu.carrera, "    ", RegAlu.notas[0], "   ",RegAlu.notas[1], "  ",RegAlu.notas[2],"     ",RegAlu.promedio)
         input()
 
-def ConsultaAlumno():
-    global ArcFisiAlu, ArcLogAlu
-    os.system("cls")
-    print("OPCION 2 - Cosulta de un alumno")
-    print("-------------------------------\n")
-    t = os.path.getsize(ArcFisiAlu)
-    RegAlu = Alumno()
-    if t==0:
-        print ("No hay Ningún Alumno Cargado")
-    else:
-        Leg= input("Ingrese legajo a buscar: ")
-        pos = BuscaSec(Leg, RegAlu) # el ordenamiento es por el campo promedio, por eso acá llamo a busca secuencial x legajo
-        if (pos == -1):
-            print ("Legajo no Encontrado")
-        else:
-            print ("Legajo Encontrado") # mostrar los campos de ESE solo alumno 
-            ArcLogAlu.seek(pos,0)
-            RegAlu= pickle.load(ArcLogAlu)
-            print ("Nombre: ",RegAlu.nombre)
-            print ("Comisión: ", RegAlu.comision)
-            print ("Carrera: ", RegAlu.carrera)
-            print ("Nota 1: ", RegAlu.notas[0])
-            print ("Nota 2: ", RegAlu.notas[1])
-            print ("Nota 3: ", RegAlu.notas[2])
-            print ("Promedio de Notas:", RegAlu.promedio)
-            print ("Baja:", RegAlu.baja)
+
                         
+
+        
+def pantalla():
+    print('Menu de opciones');
+    print('-----------------');
+    print()
+    print('1-Alta de Alumnos')
+    print('2-Consulta de UN Alumno')
+    print('3-Modificación campo comisión y/o Carrera')
+    print('4-Listado completo del archivo')
+    print('5-Listado de alumnos con Promedio mayor a 8')
+    print('6-Baja lógica')
+    print('7-Listado de alumnos ordenado por promedio descendente')
+    print('8-salir')
+    print()
+
+#----------------------------- VALIDACIONES DATOS DE ENTRADA -----------------------------------------
+def validarChar(l1,l2,l3,l4):
+    letra = input("Ingrese Carrera:  S- Sistemas   Q- Quimica  M-Mecanica   C-Civil: : ").upper()
+    while (letra !=l1) and (letra !=l2) and (letra !=l3) and (letra !=l4):
+        letra = input("Ingrese Carrera:  S- Sistemas   Q- Quimica  M-Mecanica   C-Civil: : ").upper()
+    return letra
+ 
+def validaRangoEntero(nro, min,max):
+    try:              
+        nro = int(nro)      
+        if nro >= min and nro <= max:
+            return False 
+        else:
+            return True  
+    except:
+        return True  
+
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------
+def BuscaSec(Leg, vrAlu):
+    global ArcFisiAlu, ArcLogAlu
+    t = os.path.getsize(ArcFisiAlu)
+    pos=0
+    ArcLogAlu.seek(0, 0)  
+    if t>0:
+        vrAlu = pickle.load(ArcLogAlu)
+        while (ArcLogAlu.tell()<t) and (int(Leg) != int(vrAlu.legajo)):
+            pos = ArcLogAlu.tell()
+            vrAlu = pickle.load(ArcLogAlu)
+        if int(vrAlu.legajo) == int(Leg):        
+         return pos
+        else:
+         return -1
+    else:
+        print('-----------------')
+        print("Archivo sin datos")
+        print('-----------------')
+        return -1
+
+def BusquedaDico(Leg):
+    # Método de búsqueda dicotómica
+    global ArcFisiAlu, ArcLogAlu
+    ArcLogAlu.seek(0, 0)
+    aux = pickle.load(ArcLogAlu)
+    tamReg = ArcLogAlu.tell()
+    cantReg = int(os.path.getsize(ArcFisiAlu) / tamReg)
+    inferior = 0
+    superior = cantReg - 1
+    medio = (inferior + superior) // 2
+    ArcLogAlu.seek(medio * tamReg, 0)
+    RegAlu = pickle.load(ArcLogAlu)
+    
+    while int(RegAlu.legajo) != Leg and (inferior < superior):
+        if Leg < int(RegAlu.legajo):
+            superior = medio - 1
+        else:
+            inferior = medio + 1
+        medio = (inferior + superior) // 2
+        ArcLogAlu.seek(medio * tamReg, 0)
+        RegAlu = pickle.load(ArcLogAlu)
+    
+    if int(RegAlu.legajo) == Leg:
+        return medio * tamReg
+    else:
+        return -1
+    
+#----------------------------- CARGAS/ALTAS -----------------------------------------
 def Altas():
     global ArcFisiAlu, ArcLogAlu
     os.system("cls")
@@ -405,28 +403,45 @@ def Altas():
         leg = input("Ingrese el legajo del Alumno a dar de alta, entre 1 y 9999 [0 para Volver]: ")
         while validaRangoEntero(leg, 0, 9999):
           leg = int(input("Incorrecto - Entre 1 y 9999 [0 para Volver]: "))
-        
-def pantalla():
-    print('Menu de opciones');
-    print('-----------------');
-    print()
-    print('1-Alta de Alumnos')
-    print('2-Consulta de UN Alumno')
-    print('3-Modificación campo comisión y/o Carrera')
-    print('4-Listado completo del archivo')
-    print('5-Listado de alumnos con Promedio mayor a 8')
-    print('6-Baja lógica')
-    print('7-Listado de alumnos ordenado por promedio descendente')
-    print('8-salir')
-    print()
 
-#----------------------------------------------------------------------
-# Main Program
+#----------------------------- CONSULTA DE UN REGISTRO -----------------------------------------
+def ConsultaAlumno():
+    global ArcFisiAlu, ArcLogAlu
+    os.system("cls")
+    print("OPCION 2 - Cosulta de un alumno")
+    print("-------------------------------\n")
+    t = os.path.getsize(ArcFisiAlu)
+    RegAlu = Alumno()
+    if t==0:
+        print ("No hay Ningún Alumno Cargado")
+    else:
+        Leg= input("Ingrese legajo a buscar: ")
+        pos = BuscaSec(Leg, RegAlu) # el ordenamiento es por el campo promedio, por eso acá llamo a busca secuencial x legajo
+        if (pos == -1):
+            print ("Legajo no Encontrado")
+        else:
+            print ("Legajo Encontrado") # mostrar los campos de ESE solo alumno 
+            ArcLogAlu.seek(pos,0)
+            RegAlu= pickle.load(ArcLogAlu)
+            print ("Nombre: ",RegAlu.nombre)
+            print ("Comisión: ", RegAlu.comision)
+            print ("Carrera: ", RegAlu.carrera)
+            print ("Nota 1: ", RegAlu.notas[0])
+            print ("Nota 2: ", RegAlu.notas[1])
+            print ("Nota 3: ", RegAlu.notas[2])
+            print ("Promedio de Notas:", RegAlu.promedio)
+            print ("Baja:", RegAlu.baja)
+
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
+
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 ArcFisiAlu = "C:/Users/juan_/Documents/GitHub/Algorithm-and-Data-Structure/Python/Archivos/abmAlumnos.dat"  
 if not os.path.exists(ArcFisiAlu):   
     ArcLogAlu = open(ArcFisiAlu, "w+b")   
 else:
     ArcLogAlu = open(ArcFisiAlu, "r+b")   
+
+#----------------------------- MENU DE OPCIONES -----------------------------------------
 opc = -1
 while (opc != 8):
     os.system("cls")
