@@ -15,7 +15,23 @@ class Alumno:
         self.promedio = 0.00
         self.baja= " "
 
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
+def validarChar(l1,l2,l3,l4):
+    letra = input("Ingrese Carrera:  S- Sistemas   Q- Quimica  M-Mecanica   C-Civil: : ").upper()
+    while (letra !=l1) and (letra !=l2) and (letra !=l3) and (letra !=l4):
+        letra = input("Ingrese Carrera:  S- Sistemas   Q- Quimica  M-Mecanica   C-Civil: : ").upper()
+    return letra
  
+def validaRangoEntero(nro, min,max):
+    try:              
+        nro = int(nro)      
+        if nro >= min and nro <= max:
+            return False 
+        else:
+            return True  
+    except:
+        return True  
+
 def formatearAlumno(vrAlu): # vrAlu parámetro formal
     vrAlu.legajo= str(vrAlu.legajo)
     vrAlu.legajo= vrAlu.legajo.ljust(5, ' ')     
@@ -28,6 +44,54 @@ def formatearAlumno(vrAlu): # vrAlu parámetro formal
         vrAlu.notas[i] = str(vrAlu.notas[i])
         vrAlu.notas[i]= vrAlu.notas[i].ljust(2, ' ')
     vrAlu.promedio= round(vrAlu.promedio,2) # redondeo el decimal y guarda solo 2 decimales despues de la coma
+
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------
+def BuscaSec(Leg, vrAlu):
+    global ArcFisiAlu, ArcLogAlu
+    t = os.path.getsize(ArcFisiAlu)
+    pos=0
+    ArcLogAlu.seek(0, 0)  
+    if t>0:
+        vrAlu = pickle.load(ArcLogAlu)
+        while (ArcLogAlu.tell()<t) and (int(Leg) != int(vrAlu.legajo)):
+            pos = ArcLogAlu.tell()
+            vrAlu = pickle.load(ArcLogAlu)
+        if int(vrAlu.legajo) == int(Leg):        
+         return pos
+        else:
+         return -1
+    else:
+        print('-----------------')
+        print("Archivo sin datos")
+        print('-----------------')
+        return -1
+
+def BusquedaDico(Leg):
+    # Método de búsqueda dicotómica
+    global ArcFisiAlu, ArcLogAlu
+    ArcLogAlu.seek(0, 0)
+    aux = pickle.load(ArcLogAlu)
+    tamReg = ArcLogAlu.tell()
+    cantReg = int(os.path.getsize(ArcFisiAlu) / tamReg)
+    inferior = 0
+    superior = cantReg - 1
+    medio = (inferior + superior) // 2
+    ArcLogAlu.seek(medio * tamReg, 0)
+    RegAlu = pickle.load(ArcLogAlu)
+    
+    while int(RegAlu.legajo) != Leg and (inferior < superior):
+        if Leg < int(RegAlu.legajo):
+            superior = medio - 1
+        else:
+            inferior = medio + 1
+        medio = (inferior + superior) // 2
+        ArcLogAlu.seek(medio * tamReg, 0)
+        RegAlu = pickle.load(ArcLogAlu)
+    
+    if int(RegAlu.legajo) == Leg:
+        return medio * tamReg
+    else:
+        return -1
 
 def ordenaAlumnosxProme():  #ordena por campo promedio 
     global ArcFisiAlu, ArcLogAlu 
@@ -69,66 +133,57 @@ def ordenaAlumnosxLeg():  #ordena por campo legajo
                 pickle.dump(auxi, ArcLogAlu)
                 ArcLogAlu.flush()
 
-
-
-def BajaLogica():
-    global ArcLogAlu
-    RegAlu = Alumno()
+#----------------------------- CARGAS/ALTAS -----------------------------------------
+def Altas():
+    global ArcFisiAlu, ArcLogAlu
     os.system("cls")
-    print("                Baja lógica ")
-    print("-----------------------------------------------")
-    t = os.path.getsize(ArcFisiAlu)
-    if t==0:
-        print ("No hay Alumnos registrados")
-    else:
-        leg = input("Ingrese el legajo del Alumno a dar de baja entre 1 y 9999 [0 para Volver]: ")
-        while validaRangoEntero(leg, 0, 9999):
-            leg = input("Incorrecto - Entre 0 y 9999 [0 para Volver]: ")
-        if leg != 0:
-            pos = BuscaSec(leg,RegAlu)    #invoca la función buscar para obtener la posición
-                                    #donde comienza el registro
-            if pos == -1:               #si no se encontró el Alumno
-                print("El Alumno no existe")
-            else:
-                ArcLogAlu.seek(pos, 0)        #Ubico el punto en la posición donde comienza el registro
-                RegAlu = pickle.load(ArcLogAlu)    #Cargo el registro en memoria
-                print("Alumno a dar de baja lógica:")
-                print ("Nombre: ",RegAlu.nombre)
-                print ("Comisión: ", RegAlu.comision)
-                print ("Carrera: ", RegAlu.carrera)
-                print ("Nota 1: ", RegAlu.notas[0])
-                print ("Nota 2: ", RegAlu.notas[1])
-                print ("Nota 3: ", RegAlu.notas[2])
-                print ("Promedio de Notas:", RegAlu.promedio)
-
-                
-                rta = input("seguro Deseas dar de baja (S/N): ").upper()
-                while rta != "S" and rta != "N":
-                    rta = input("Por favor, solo contesta con S para Si o N para No: ").upper()
-                if rta == "S":  # si no tengo un campo especial para dar de baja debo limpiar los campos del registro MENOS el campo legajo!
-                    #RegAlu.comision= str('')
-                    #RegAlu.nombre= str('')
-                    #RegAlu.carrera= str('')
-                    #for i in range(0, 3):
-                        #RegAlu.notas[i] = 0
-                    #RegAlu.promedio= float(0.00) 
-                    #RegAlu.promedio= round(RegAlu.promedio,2) # redondeo el decimal y guarda solo 2 decimales despues de la coma
-                   
-                    #RegAlu.promedio= float(0.00)            
-                    RegAlu.baja="S"
-                    ArcLogAlu.seek(pos, 0)
-                    formatearAlumno(RegAlu)
-
-                    pickle.dump(RegAlu, ArcLogAlu)
-                    ArcLogAlu.flush()  #Fuerza el envío del objeto/registro al archivo físico sin necesidad de cerrar el mismo
-                    print('--------------------')
-                    print("   Baja exitosa")
-                    print('--------------------')
-                else: 
-                    print('tranquilo...los datos no fueron borrados')
-                        
+    print("OPCION 1 - Alta de Alumnos")
+    print("----------------------------\n")
+    leg = input("Ingrese el legajo del Alumno a dar de alta, entre 1 y 9999 [0- para Volver]: ")
+    while validaRangoEntero(leg, 0, 9999):
+        leg = int(input("Incorrecto - Entre 1 y 9999 [0 para Volver]: "))
+    RegAlu = Alumno()
+    while int(leg) != 0:
+        if BuscaSec(leg, RegAlu) == -1:
+            RegAlu.legajo = int(leg)
+            Acum=0
+            RegAlu.nombre = input("Nombre y Apellido <hasta 25 caracteres>: ")
+            while len(RegAlu.nombre)<1 or len(RegAlu.nombre)>25:
+                RegAlu.nombre = input("Incorrecto - Nombre y Apellido <hasta 25 caracteres>: ")
+            RegAlu.comision = input("comision entre 1 y 5: ")
+            while validaRangoEntero(RegAlu.comision, 1, 5):
+                RegAlu.comision = int(input("Incorrecto - numero de comision entre 1 y 5: "))
+            carr=validarChar('S','M','Q','C')
+            RegAlu.carrera = carr
+            n1=input("Ingrese nota 1er parcial entre 1 y 10: ")
+            while validaRangoEntero(n1, 1, 10):
+                n1= input("Incorrecto entre 1 y 10: ")
+            n2=input("Ingrese nota 2do parcial entre 1 y 10: ")
+            while validaRangoEntero(n2, 1, 10):
+                n2= input("Incorrecto entre 1 y 10: ")
+            n3=input("Ingrese nota 3er parcial entre 1 y 10: ")
+            while validaRangoEntero(n3, 1, 10):
+                n3= input("Incorrecto entre 1 y 10: ")  
+            Acum= int(n1)+int(n2)+int(n3)
+            RegAlu.notas[0] =n1
+            RegAlu.notas[1] =n2
+            RegAlu.notas[2] =n3
+            RegAlu.promedio= Acum/3 
+            RegAlu.baja= "N"
+            formatearAlumno(RegAlu)
+            pickle.dump(RegAlu, ArcLogAlu)
+            ArcLogAlu.flush()
+            print ("-----------------------")
+            print("Alta de Alumno exitosa")
+            print ("-----------------------")
+        else:
+            print("Ya existe el Alumno con ese legajo, ingrese nuevamente..")
             os.system("pause")
+        leg = input("Ingrese el legajo del Alumno a dar de alta, entre 1 y 9999 [0 para Volver]: ")
+        while validaRangoEntero(leg, 0, 9999):
+          leg = int(input("Incorrecto - Entre 1 y 9999 [0 para Volver]: "))
 
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
 def ModificaCampo():
     global ArcLogAlu
     RegAlu = Alumno()
@@ -197,6 +252,124 @@ def ModificaCampo():
                     print ("Promedio de Notas:", RegAlu.promedio)
             os.system("pause")
 
+#----------------------------- BAJA LOGICA -----------------------------------------
+def BajaLogica():
+    global ArcLogAlu
+    RegAlu = Alumno()
+    os.system("cls")
+    print("                Baja lógica ")
+    print("-----------------------------------------------")
+    t = os.path.getsize(ArcFisiAlu)
+    if t==0:
+        print ("No hay Alumnos registrados")
+    else:
+        leg = input("Ingrese el legajo del Alumno a dar de baja entre 1 y 9999 [0 para Volver]: ")
+        while validaRangoEntero(leg, 0, 9999):
+            leg = input("Incorrecto - Entre 0 y 9999 [0 para Volver]: ")
+        if leg != 0:
+            pos = BuscaSec(leg,RegAlu)    #invoca la función buscar para obtener la posición
+                                    #donde comienza el registro
+            if pos == -1:               #si no se encontró el Alumno
+                print("El Alumno no existe")
+            else:
+                ArcLogAlu.seek(pos, 0)        #Ubico el punto en la posición donde comienza el registro
+                RegAlu = pickle.load(ArcLogAlu)    #Cargo el registro en memoria
+                print("Alumno a dar de baja lógica:")
+                print ("Nombre: ",RegAlu.nombre)
+                print ("Comisión: ", RegAlu.comision)
+                print ("Carrera: ", RegAlu.carrera)
+                print ("Nota 1: ", RegAlu.notas[0])
+                print ("Nota 2: ", RegAlu.notas[1])
+                print ("Nota 3: ", RegAlu.notas[2])
+                print ("Promedio de Notas:", RegAlu.promedio)
+
+                
+                rta = input("seguro Deseas dar de baja (S/N): ").upper()
+                while rta != "S" and rta != "N":
+                    rta = input("Por favor, solo contesta con S para Si o N para No: ").upper()
+                if rta == "S":  # si no tengo un campo especial para dar de baja debo limpiar los campos del registro MENOS el campo legajo!
+                    #RegAlu.comision= str('')
+                    #RegAlu.nombre= str('')
+                    #RegAlu.carrera= str('')
+                    #for i in range(0, 3):
+                        #RegAlu.notas[i] = 0
+                    #RegAlu.promedio= float(0.00) 
+                    #RegAlu.promedio= round(RegAlu.promedio,2) # redondeo el decimal y guarda solo 2 decimales despues de la coma
+                   
+                    #RegAlu.promedio= float(0.00)            
+                    RegAlu.baja="S"
+                    ArcLogAlu.seek(pos, 0)
+                    formatearAlumno(RegAlu)
+
+                    pickle.dump(RegAlu, ArcLogAlu)
+                    ArcLogAlu.flush()  #Fuerza el envío del objeto/registro al archivo físico sin necesidad de cerrar el mismo
+                    print('--------------------')
+                    print("   Baja exitosa")
+                    print('--------------------')
+                else: 
+                    print('tranquilo...los datos no fueron borrados')
+                        
+            os.system("pause")
+
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
+def ConsultaAlumno():
+    global ArcFisiAlu, ArcLogAlu
+    os.system("cls")
+    print("OPCION 2 - Cosulta de un alumno")
+    print("-------------------------------\n")
+    t = os.path.getsize(ArcFisiAlu)
+    RegAlu = Alumno()
+    if t==0:
+        print ("No hay Ningún Alumno Cargado")
+    else:
+        Leg= input("Ingrese legajo a buscar: ")
+        pos = BuscaSec(Leg, RegAlu) # el ordenamiento es por el campo promedio, por eso acá llamo a busca secuencial x legajo
+        if (pos == -1):
+            print ("Legajo no Encontrado")
+        else:
+            print ("Legajo Encontrado") # mostrar los campos de ESE solo alumno 
+            ArcLogAlu.seek(pos,0)
+            RegAlu= pickle.load(ArcLogAlu)
+            print ("Nombre: ",RegAlu.nombre)
+            print ("Comisión: ", RegAlu.comision)
+            print ("Carrera: ", RegAlu.carrera)
+            print ("Nota 1: ", RegAlu.notas[0])
+            print ("Nota 2: ", RegAlu.notas[1])
+            print ("Nota 3: ", RegAlu.notas[2])
+            print ("Promedio de Notas:", RegAlu.promedio)
+            print ("Baja:", RegAlu.baja)
+	
+def ListaAlumnos():
+    global ArcFisiAlu, ArcLogAlu 
+    os.system("cls")
+    print("- Listado de alumnos")
+    print("--------------------------------------------------------------------------------\n")
+    t = os.path.getsize(ArcFisiAlu)
+    if t==0:
+        print ("No hay Alumnos registrados a listar")
+    else:
+        print(" muestra Desordenado")
+        print ("-------------------")
+        print('legajo  Nombre                     comisión   Carrera  nota1  nota2  nota3   Promedio')
+        print('--------------------------------------------------------------------------------------')
+        ArcLogAlu.seek(0, 0)
+        RegAlu = Alumno()
+        while ArcLogAlu.tell()<t:
+            RegAlu = pickle.load(ArcLogAlu)
+            print(RegAlu.legajo,"  ",RegAlu.nombre, "  ", RegAlu.comision,"       ",RegAlu.carrera, "    ", RegAlu.notas[0], "   ",RegAlu.notas[1], "  ",RegAlu.notas[2],"     ",RegAlu.promedio)
+        print()    
+        print("muestra Ordenado por Legajo")
+        print ("--------------------------")
+        print('legajo  Nombre                     comisión   Carrera  nota1  nota2  nota3   Promedio')
+        print('-------------------------------------------------------------------------------------')
+        ordenaAlumnosxLeg()  #ORDENA POR LEGAJO
+        ArcLogAlu.seek(0, 0)
+        RegAlu = Alumno()
+        while ArcLogAlu.tell()<t:
+            RegAlu = pickle.load(ArcLogAlu)
+            print(RegAlu.legajo,"  ",RegAlu.nombre, "  ", RegAlu.comision,"       ",RegAlu.carrera, "    ", RegAlu.notas[0], "   ",RegAlu.notas[1], "  ",RegAlu.notas[2],"     ",RegAlu.promedio)
+        input()
+        
 def ListaAlumnosPromeMayor8():
     global ArcFisiAlu, ArcLogAlu 
     os.system("cls")
@@ -239,42 +412,7 @@ def ListaxPromeDescendente():
             RegAlu = pickle.load(ArcLogAlu)
             print(RegAlu.legajo,"  ",RegAlu.nombre, "  ", RegAlu.comision,"       ",RegAlu.carrera, "    ", RegAlu.notas[0], "   ",RegAlu.notas[1], "  ",RegAlu.notas[2],"   ",RegAlu.promedio ,"   ",RegAlu.baja)
         input()
-	
-def ListaAlumnos():
-    global ArcFisiAlu, ArcLogAlu 
-    os.system("cls")
-    print("- Listado de alumnos")
-    print("--------------------------------------------------------------------------------\n")
-    t = os.path.getsize(ArcFisiAlu)
-    if t==0:
-        print ("No hay Alumnos registrados a listar")
-    else:
-        print(" muestra Desordenado")
-        print ("-------------------")
-        print('legajo  Nombre                     comisión   Carrera  nota1  nota2  nota3   Promedio')
-        print('--------------------------------------------------------------------------------------')
-        ArcLogAlu.seek(0, 0)
-        RegAlu = Alumno()
-        while ArcLogAlu.tell()<t:
-            RegAlu = pickle.load(ArcLogAlu)
-            print(RegAlu.legajo,"  ",RegAlu.nombre, "  ", RegAlu.comision,"       ",RegAlu.carrera, "    ", RegAlu.notas[0], "   ",RegAlu.notas[1], "  ",RegAlu.notas[2],"     ",RegAlu.promedio)
-        print()    
-        print("muestra Ordenado por Legajo")
-        print ("--------------------------")
-        print('legajo  Nombre                     comisión   Carrera  nota1  nota2  nota3   Promedio')
-        print('-------------------------------------------------------------------------------------')
-        ordenaAlumnosxLeg()  #ORDENA POR LEGAJO
-        ArcLogAlu.seek(0, 0)
-        RegAlu = Alumno()
-        while ArcLogAlu.tell()<t:
-            RegAlu = pickle.load(ArcLogAlu)
-            print(RegAlu.legajo,"  ",RegAlu.nombre, "  ", RegAlu.comision,"       ",RegAlu.carrera, "    ", RegAlu.notas[0], "   ",RegAlu.notas[1], "  ",RegAlu.notas[2],"     ",RegAlu.promedio)
-        input()
 
-
-                        
-
-        
 def pantalla():
     print('Menu de opciones');
     print('-----------------');
@@ -288,149 +426,6 @@ def pantalla():
     print('7-Listado de alumnos ordenado por promedio descendente')
     print('8-salir')
     print()
-
-#----------------------------- VALIDACIONES DATOS DE ENTRADA -----------------------------------------
-def validarChar(l1,l2,l3,l4):
-    letra = input("Ingrese Carrera:  S- Sistemas   Q- Quimica  M-Mecanica   C-Civil: : ").upper()
-    while (letra !=l1) and (letra !=l2) and (letra !=l3) and (letra !=l4):
-        letra = input("Ingrese Carrera:  S- Sistemas   Q- Quimica  M-Mecanica   C-Civil: : ").upper()
-    return letra
- 
-def validaRangoEntero(nro, min,max):
-    try:              
-        nro = int(nro)      
-        if nro >= min and nro <= max:
-            return False 
-        else:
-            return True  
-    except:
-        return True  
-
-#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------
-def BuscaSec(Leg, vrAlu):
-    global ArcFisiAlu, ArcLogAlu
-    t = os.path.getsize(ArcFisiAlu)
-    pos=0
-    ArcLogAlu.seek(0, 0)  
-    if t>0:
-        vrAlu = pickle.load(ArcLogAlu)
-        while (ArcLogAlu.tell()<t) and (int(Leg) != int(vrAlu.legajo)):
-            pos = ArcLogAlu.tell()
-            vrAlu = pickle.load(ArcLogAlu)
-        if int(vrAlu.legajo) == int(Leg):        
-         return pos
-        else:
-         return -1
-    else:
-        print('-----------------')
-        print("Archivo sin datos")
-        print('-----------------')
-        return -1
-
-def BusquedaDico(Leg):
-    # Método de búsqueda dicotómica
-    global ArcFisiAlu, ArcLogAlu
-    ArcLogAlu.seek(0, 0)
-    aux = pickle.load(ArcLogAlu)
-    tamReg = ArcLogAlu.tell()
-    cantReg = int(os.path.getsize(ArcFisiAlu) / tamReg)
-    inferior = 0
-    superior = cantReg - 1
-    medio = (inferior + superior) // 2
-    ArcLogAlu.seek(medio * tamReg, 0)
-    RegAlu = pickle.load(ArcLogAlu)
-    
-    while int(RegAlu.legajo) != Leg and (inferior < superior):
-        if Leg < int(RegAlu.legajo):
-            superior = medio - 1
-        else:
-            inferior = medio + 1
-        medio = (inferior + superior) // 2
-        ArcLogAlu.seek(medio * tamReg, 0)
-        RegAlu = pickle.load(ArcLogAlu)
-    
-    if int(RegAlu.legajo) == Leg:
-        return medio * tamReg
-    else:
-        return -1
-    
-#----------------------------- CARGAS/ALTAS -----------------------------------------
-def Altas():
-    global ArcFisiAlu, ArcLogAlu
-    os.system("cls")
-    print("OPCION 1 - Alta de Alumnos")
-    print("----------------------------\n")
-    leg = input("Ingrese el legajo del Alumno a dar de alta, entre 1 y 9999 [0- para Volver]: ")
-    while validaRangoEntero(leg, 0, 9999):
-        leg = int(input("Incorrecto - Entre 1 y 9999 [0 para Volver]: "))
-    RegAlu = Alumno()
-    while int(leg) != 0:
-        if BuscaSec(leg, RegAlu) == -1:
-            RegAlu.legajo = int(leg)
-            Acum=0
-            RegAlu.nombre = input("Nombre y Apellido <hasta 25 caracteres>: ")
-            while len(RegAlu.nombre)<1 or len(RegAlu.nombre)>25:
-                RegAlu.nombre = input("Incorrecto - Nombre y Apellido <hasta 25 caracteres>: ")
-            RegAlu.comision = input("comision entre 1 y 5: ")
-            while validaRangoEntero(RegAlu.comision, 1, 5):
-                RegAlu.comision = int(input("Incorrecto - numero de comision entre 1 y 5: "))
-            carr=validarChar('S','M','Q','C')
-            RegAlu.carrera = carr
-            n1=input("Ingrese nota 1er parcial entre 1 y 10: ")
-            while validaRangoEntero(n1, 1, 10):
-                n1= input("Incorrecto entre 1 y 10: ")
-            n2=input("Ingrese nota 2do parcial entre 1 y 10: ")
-            while validaRangoEntero(n2, 1, 10):
-                n2= input("Incorrecto entre 1 y 10: ")
-            n3=input("Ingrese nota 3er parcial entre 1 y 10: ")
-            while validaRangoEntero(n3, 1, 10):
-                n3= input("Incorrecto entre 1 y 10: ")  
-            Acum= int(n1)+int(n2)+int(n3)
-            RegAlu.notas[0] =n1
-            RegAlu.notas[1] =n2
-            RegAlu.notas[2] =n3
-            RegAlu.promedio= Acum/3 
-            RegAlu.baja= "N"
-            formatearAlumno(RegAlu)
-            pickle.dump(RegAlu, ArcLogAlu)
-            ArcLogAlu.flush()
-            print ("-----------------------")
-            print("Alta de Alumno exitosa")
-            print ("-----------------------")
-        else:
-            print("Ya existe el Alumno con ese legajo, ingrese nuevamente..")
-            os.system("pause")
-        leg = input("Ingrese el legajo del Alumno a dar de alta, entre 1 y 9999 [0 para Volver]: ")
-        while validaRangoEntero(leg, 0, 9999):
-          leg = int(input("Incorrecto - Entre 1 y 9999 [0 para Volver]: "))
-
-#----------------------------- CONSULTA DE UN REGISTRO -----------------------------------------
-def ConsultaAlumno():
-    global ArcFisiAlu, ArcLogAlu
-    os.system("cls")
-    print("OPCION 2 - Cosulta de un alumno")
-    print("-------------------------------\n")
-    t = os.path.getsize(ArcFisiAlu)
-    RegAlu = Alumno()
-    if t==0:
-        print ("No hay Ningún Alumno Cargado")
-    else:
-        Leg= input("Ingrese legajo a buscar: ")
-        pos = BuscaSec(Leg, RegAlu) # el ordenamiento es por el campo promedio, por eso acá llamo a busca secuencial x legajo
-        if (pos == -1):
-            print ("Legajo no Encontrado")
-        else:
-            print ("Legajo Encontrado") # mostrar los campos de ESE solo alumno 
-            ArcLogAlu.seek(pos,0)
-            RegAlu= pickle.load(ArcLogAlu)
-            print ("Nombre: ",RegAlu.nombre)
-            print ("Comisión: ", RegAlu.comision)
-            print ("Carrera: ", RegAlu.carrera)
-            print ("Nota 1: ", RegAlu.notas[0])
-            print ("Nota 2: ", RegAlu.notas[1])
-            print ("Nota 3: ", RegAlu.notas[2])
-            print ("Promedio de Notas:", RegAlu.promedio)
-            print ("Baja:", RegAlu.baja)
 
 #----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 
