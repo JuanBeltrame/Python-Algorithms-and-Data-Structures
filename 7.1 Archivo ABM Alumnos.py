@@ -96,7 +96,7 @@ def BusquedaDico(Leg):
 def ordenaAlumnosxProme():  #ordena por campo promedio 
     global ArcFisiAlu, ArcLogAlu 
     ArcLogAlu.seek (0, 0)
-    aux = pickle.load(ArcLogAlu)
+    auxi = pickle.load(ArcLogAlu)
     tamReg = ArcLogAlu.tell() 
     tamArch = os.path.getsize(ArcFisiAlu)
     cantReg = int(tamArch / tamReg)  
