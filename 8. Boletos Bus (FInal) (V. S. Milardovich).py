@@ -17,7 +17,7 @@ class Empresa:
 	def __init(self):
 		self.nombre = ''
 
-#----------------------------- VALIDACIONES DATOS DE ENTRADA -----------------------------------------
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 def formatearBoleto(boleto):
 	boleto.nro_tarjeta = str(boleto.nro_tarjeta).ljust(12, ' ')
 	boleto.dia = str(boleto.dia).ljust(2,' ')
@@ -104,6 +104,10 @@ def altaBoletos(afBoleto, alBoleto):
     cargarBoleto(afBoleto, alBoleto)
     ordenarBoletos(afBoleto, alBoleto)
 
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
+
+#----------------------------- BAJA LOGICA -----------------------------------------
+
 #----------------------------- CALCULOS -----------------------------------------	
 '''
 Este procedimiento se va a llamar cada vez que se ejecute el programa principal. Es usado para crear el archivo de empresas con contenido por defecto.
@@ -147,16 +151,12 @@ def reporte(afBoleto, alBoleto, mes):
             print("Dia: ", str(j), " viajes: ", str(dataAux[i][j][0]), " total: ", str(dataAux[i][j][1])," pesos")
         print()
 
-
 #----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------              
 def mostrarBoleto(a):
 	print(a.nro_tarjeta.strip(), a.dia.strip(), a.mes.strip(), a.hora.strip(), a.nro_colectivo.strip(), a.monto_viaje.strip())
 
 
-
-  
-
-              
+#----------------------------- MENU DE OPCIONES -----------------------------------------           
 def menuPrincipal():
     opt = 1
     while opt != 0:

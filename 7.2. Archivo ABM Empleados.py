@@ -141,6 +141,8 @@ def ordenaEmpleados():  # método ordenamiento falso burbuja
                 pickle.dump(auxi, alEmpleados)
                 alEmpleados.flush()
 
+#----------------------------- INICIALIZAR -----------------------------------------
+
 #----------------------------- CARGAS/ALTAS -----------------------------------------
 def altaEmpleado():
     global afEmpleados, alEmpleados
@@ -274,6 +276,8 @@ def bajaEmpleado():
                         print("Los datos actualizados del empleado son:")
                         mostrarEmpleado(emp)
     os.system("pause")
+
+#----------------------------- CALCULOS -----------------------------------------
 
 #----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
 def listarEmpleadosActivos():
