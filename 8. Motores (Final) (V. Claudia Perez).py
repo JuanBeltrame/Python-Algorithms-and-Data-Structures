@@ -26,7 +26,7 @@ class rDescarte:
 		self.p=[0.00]*3
 		self.Vr=0.00
 
-#----------------------------- VALIDACIONES DATOS DE ENTRADA -----------------------------------------
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 # funcion para validar el ingreso de una fecha válida (dia/mes/año correctos)
 def validarFecha():
     flag = True
@@ -125,6 +125,11 @@ def ordeno():
 				amod.seek(j*Tamregm,0)
 				pickle.dump(auxi,amod)
 				amod.flush()
+#----------------------------- INICIALIZAR -----------------------------------------
+# inicializacion en cero, al arreglo Prom (acumulacion y calculo de promedios pedidos)
+def inicializo(prome):
+	for i in range(3):
+		prome[i]=0.00
 
 #----------------------------- CARGAS/ALTAS -----------------------------------------
 # ingreso de datos(Alta)  al archivo Lotes.dat
@@ -199,9 +204,6 @@ def altalote():
 	print()
 	cargarLote()
 
-def mostrarLote(lot): 
-	print("Nro lote: ",lot.nrol,"  fecha:", lot.ff[0],"/",lot.ff[1],"/",lot.ff[2]," ","Modelo: ",lot.mm)
-
 # ingreso de datos(Alta)  al archivo Modelos.dat
 # El enunciado lo informa como cargado, pero realizamos la creación y carga del archivo para poder tener datos de prueba 
 def cargarmodelo():
@@ -252,8 +254,33 @@ def altamodelo():
 	print()
 	cargarmodelo()
 
-def mostrarmodelo(m): 
-	print("Modelo: ", m.mod,"  Coeficiente: ", m.coef,)
+# armado de registro d en RAM, del archivo Descarte.dat, para su Alta
+def armoregd(prome, c):
+	global ades
+	global d
+	d = rDescarte()
+	for i in range(3):
+		d.fd[i]=l.ff[i]
+	d.nl=l.nrol
+	for i in range(3):
+		d.p[i]=prome[i]
+	d.vr=c
+	print("Armado con exito")
+	tec=input()
+# Altas (ingreso de informacion) en archivo Descarte.dat
+def altadescarte(c):
+	global afdes, ades
+	armoregd(prom,c)
+	ades.seek(0,2)
+	pickle.dump(d,ades)
+	ades.flush()
+	print("alta exitosa en descarte.dat")
+	print(d.nl," ",d.vr)
+	tec=input()
+
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
+
+#----------------------------- BAJA LOGICA -----------------------------------------
 
 #----------------------------- CALCULOS -----------------------------------------	
 # Procedimiento que calcula los promedios pedidos en enunciado con los valores de prueba	
@@ -284,25 +311,13 @@ def calculos():
 			if descarto(prom,coeficiente)==True:
 				altadescarte(coeficiente)
 
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
+def mostrarLote(lot): 
+	print("Nro lote: ",lot.nrol,"  fecha:", lot.ff[0],"/",lot.ff[1],"/",lot.ff[2]," ","Modelo: ",lot.mm)
 
-# Altas (ingreso de informacion) en archivo Descarte.dat
-def altadescarte(c):
-	global afdes, ades
-	armoregd(prom,c)
-	ades.seek(0,2)
-	pickle.dump(d,ades)
-	ades.flush()
-	print("alta exitosa en descarte.dat")
-	print(d.nl," ",d.vr)
-	tec=input()
-
-# inicializacion en cero, al arreglo Prom (acumulacion y calculo de promedios pedidos)
-def inicializo(prome):
-	for i in range(3):
-		prome[i]=0.00
-
-
-
+def mostrarmodelo(m): 
+	print("Modelo: ", m.mod,"  Coeficiente: ", m.coef,)
+	
 # Litado solicitado, recorriendo el archivo de descarte.dat
 def listado():
 	os.system("cls")
@@ -318,23 +333,7 @@ def listado():
 		print("  ",d.nl," ","{0:.2f}".format(d.p[0])," ","{0:.2f}".format(d.p[1]),"{0:.2f}".format(d.p[2])," ","{0:.2f}".format(d.vr))
 	os.system("pause")
 
-
-# armado de registro d en RAM, del archivo Descarte.dat, para su Alta
-def armoregd(prome, c):
-	global ades
-	global d
-	d = rDescarte()
-	for i in range(3):
-		d.fd[i]=l.ff[i]
-	d.nl=l.nrol
-	for i in range(3):
-		d.p[i]=prome[i]
-	d.vr=c
-	print("Armado con exito")
-	tec=input()
-
-
-
+#----------------------------- MENU DE OPCIONES -----------------------------------------       
 
 #----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 global aflote, afmod, afdes                   # archivos

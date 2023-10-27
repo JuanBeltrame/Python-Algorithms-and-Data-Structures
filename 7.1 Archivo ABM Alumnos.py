@@ -133,6 +133,8 @@ def ordenaAlumnosxLeg():  #ordena por campo legajo
                 pickle.dump(auxi, ArcLogAlu)
                 ArcLogAlu.flush()
 
+#----------------------------- INICIALIZAR -----------------------------------------
+
 #----------------------------- CARGAS/ALTAS -----------------------------------------
 def Altas():
     global ArcFisiAlu, ArcLogAlu
@@ -311,6 +313,8 @@ def BajaLogica():
                         
             os.system("pause")
 
+#----------------------------- CALCULOS -----------------------------------------
+
 #----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
 def ConsultaAlumno():
     global ArcFisiAlu, ArcLogAlu
@@ -426,6 +430,8 @@ def pantalla():
     print('7-Listado de alumnos ordenado por promedio descendente')
     print('8-salir')
     print()
+
+#----------------------------- MENU DE OPCIONES -----------------------------------------     
 
 #----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 
