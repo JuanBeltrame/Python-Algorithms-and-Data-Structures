@@ -5,22 +5,23 @@ import os.path
 import datetime
 from datetime import date  
 class Multa:
- 	def __init__(self):  # constructor dentro de la clase multa
- 		self.codigo = 0
- 		self.patente = " " #6
- 		self.dni = " "  #9
- 		self.tipo = 0
- 		self.lugar= " "#30
- 		self.fecVto= " "#8
- 		self.grua= " " # S/N
- 		self.fecPago= " "#8
- 		self.pagado=False
+    def __init__(self):  # constructor dentro de la clase multa
+        self.codigo = 0
+        self.patente = " "  # 6
+        self.dni = " "  # 9
+        self.tipo = 0
+        self.lugar = " "  # 30
+        self.fecVto = " "  # 8
+        self.grua = " "  # S/N
+        self.fecPago = " "  # 8
+        self.pagado = False
 
 class Tipo:
- 	def __init__(self):  # constructor dentro de la clase Tipos de infracción
- 		self.tipo = 0
- 		self.descripción= " " # no lo pide el enunciado pero es conveniente saber que infracción es.
- 		self.valor= 0.00
+    def __init__(self):  # constructor dentro de la clase Tipos de infracción
+        self.tipo = 0
+        self.descripción = " "  # no lo pide el enunciado pero es conveniente saber que infracción es.
+        self.valor = 0.00
+
 
 
 def validargrua():
@@ -104,38 +105,39 @@ def ordenaMultasxCodigo():  #ordena por campo codigo
                 pickle.dump(auxi, ArcLogMul)
                 ArcLogMul.flush()
 
-def BuscaDico (Cod):
-	global ArcFisiMul, ArcLogMul
-	RegMul = Multa()
-	t = os.path.getsize(ArcFisiMul)
-	if t>0:
-		ArcLogMul.seek (0,0)
-		RegMul = pickle.load(ArcLogMul)
-		tamReg = ArcLogMul.tell()
-		cantReg = int(os.path.getsize(ArcFisiMul) / tamReg)
-		inferior = 0
-		superior = cantReg-1
-		medio = inferior + superior // 2
-		ArcLogMul.seek(medio*tamReg, 0)
-		RegMul= pickle.load(ArcLogMul)
-		while int(RegMul.codigo)!= Cod and (inferior < superior):
-			if int(Cod) < int(RegMul.codigo):
-				superior = medio - 1
-			else:
-				inferior = medio + 1
-			medio = (inferior + superior) //2
-			ArcLogMul.seek(medio*tamReg, 0)
-			RegMul= pickle.load(ArcLogMul)
-		if int(RegMul.codigo) == Cod:
-			return medio*tamReg
-		else:
-			return -1
-	else:
-    		print('-----------------')
-    		print("Archivo sin datos")
-    		print('-----------------')
-    		input()
-    		return -1 
+def BuscaDico(Cod):
+    global ArcFisiMul, ArcLogMul
+    RegMul = Multa()
+    t = os.path.getsize(ArcFisiMul)
+    if t > 0:
+        ArcLogMul.seek(0, 0)
+        RegMul = pickle.load(ArcLogMul)
+        tamReg = ArcLogMul.tell()
+        cantReg = int(os.path.getsize(ArcFisiMul) / tamReg)
+        inferior = 0
+        superior = cantReg - 1
+        medio = inferior + superior // 2
+        ArcLogMul.seek(medio * tamReg, 0)
+        RegMul = pickle.load(ArcLogMul)
+        while int(RegMul.codigo) != Cod and (inferior < superior):
+            if int(Cod) < int(RegMul.codigo):
+                superior = medio - 1
+            else:
+                inferior = medio + 1
+            medio = (inferior + superior) // 2
+            ArcLogMul.seek(medio * tamReg, 0)
+            RegMul = pickle.load(ArcLogMul)
+        if int(RegMul.codigo) == Cod:
+            return medio * tamReg
+        else:
+            return -1
+    else:
+        print('-----------------')
+        print("Archivo sin datos")
+        print('-----------------')
+        input()
+        return -1
+
         
 def ingresa(cod,vrMul):
 		vrMul.codigo = int(cod)

@@ -462,28 +462,30 @@ listadoClinica()  #muestro acá el listado para ver si se intercaló correctamen
 opc = -1
 
 while (opc != 0):
-	os.system("cls")
-	pantalla()
-	opc = input("Ingrese opcion <0 a 5>: ")
-	while (validaRangoEntero(opc, 0, 5,0)):
-	    opc = input("Incorrecto. Ingrese opcion <0 a 5>: ")
-	opc = int(opc)
-	if (opc == 1):
-		listadoFisio()
-	elif (opc == 2):
-		listadoTrau()
-	elif (opc == 3):
-		listadoClinica()
-	elif (opc == 4):
-		ListadoXpac()
-		input()
-	elif (opc == 5):
-		BajaLogica()   
-	elif (opc == 0):
-		ArcLogFisio.close()
-		ArcLogTrauma.close() 
-		ArcLogClini.close()    
-		print("\n\n archivos cerrados ..Fin del programa!!")
+    os.system("cls")
+    pantalla()
+    opc = input("Ingrese opcion <0 a 5>: ")
+    while (validaRangoEntero(opc, 0, 5, 0)):
+        opc = input("Incorrecto. Ingrese opcion <0 a 5>: ")
+    opc = int(opc)
+    if (opc == 1):
+        listadoFisio()
+    elif (opc == 2):
+        listadoTrau()
+    elif (opc == 3):
+        listadoClinica()
+    elif (opc == 4):
+        ListadoXpac()
+        input()
+    elif (opc == 5):
+        BajaLogica()   
+    elif (opc == 0):
+        ArcLogFisio.close()
+        ArcLogTrauma.close() 
+        ArcLogClini.close()    
+        print("\n\n archivos cerrados ..Fin del programa!!")
+
 print("\n\n CHAU!!!!")
 input()
+
 
