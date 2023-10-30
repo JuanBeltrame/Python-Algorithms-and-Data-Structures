@@ -82,29 +82,7 @@ def FormatearTipos(vrTip):
     vrTip.descripción= vrTip.descripción.ljust(30, ' ')  
     vrTip.valor= str(vrTip.valor)
     vrTip.valor= vrTip.valor.ljust(10, ' ') 
-
-
-
-def ordenaMultasxCodigo():  #ordena por campo codigo 
-    global ArcFisiMul, ArcLogMul 
-    ArcLogMul.seek (0, 0)
-    aux = pickle.load(ArcLogMul)
-    tamReg = ArcLogMul.tell() 
-    tamArch = os.path.getsize(ArcFisiMul)
-    cantReg = int(tamArch / tamReg)  
-    for i in range(0, cantReg-1):
-        for j in range (i+1, cantReg):
-            ArcLogMul.seek (i*tamReg, 0)
-            auxi = pickle.load(ArcLogMul)
-            ArcLogMul.seek (j*tamReg, 0)
-            auxj = pickle.load(ArcLogMul)
-            if (int(auxi.codigo) > int(auxj.codigo)):
-                ArcLogMul.seek (i*tamReg, 0)
-                pickle.dump(auxj, ArcLogMul)
-                ArcLogMul.seek (j*tamReg, 0)
-                pickle.dump(auxi, ArcLogMul)
-                ArcLogMul.flush()
-
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------
 def BuscaDico(Cod):
     global ArcFisiMul, ArcLogMul
     RegMul = Multa()
@@ -137,6 +115,27 @@ def BuscaDico(Cod):
         print('-----------------')
         input()
         return -1
+
+def ordenaMultasxCodigo():  #ordena por campo codigo 
+    global ArcFisiMul, ArcLogMul 
+    ArcLogMul.seek (0, 0)
+    aux = pickle.load(ArcLogMul)
+    tamReg = ArcLogMul.tell() 
+    tamArch = os.path.getsize(ArcFisiMul)
+    cantReg = int(tamArch / tamReg)  
+    for i in range(0, cantReg-1):
+        for j in range (i+1, cantReg):
+            ArcLogMul.seek (i*tamReg, 0)
+            auxi = pickle.load(ArcLogMul)
+            ArcLogMul.seek (j*tamReg, 0)
+            auxj = pickle.load(ArcLogMul)
+            if (int(auxi.codigo) > int(auxj.codigo)):
+                ArcLogMul.seek (i*tamReg, 0)
+                pickle.dump(auxj, ArcLogMul)
+                ArcLogMul.seek (j*tamReg, 0)
+                pickle.dump(auxi, ArcLogMul)
+                ArcLogMul.flush()
+
 
         
 def ingresa(cod,vrMul):

@@ -40,6 +40,7 @@ def formatearExistencia(vrExi):
 	vrExi.cantS2= str(vrExi.cantS2)
 	vrExi.cantS2 = vrExi.cantS2.ljust(10, ' ')
 
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------
 def BuscaS1(A):
     global ArcFisiSucu1, ArcLogSuc1
     RegSuc1= Sucursal()
@@ -101,6 +102,7 @@ def OrdenaSuc1():
 				ArcLogSuc1.seek (j*tamReg, 0)
 				pickle.dump(auxi, ArcLogSuc1)
 				ArcLogSuc1.flush()
+
 def OrdenaSuc2():
 	global ArcFisiSucu2, ArcLogSuc2 
 	ArcLogSuc2.seek (0,0)
@@ -121,6 +123,7 @@ def OrdenaSuc2():
 				pickle.dump(auxi, ArcLogSuc2)
 				ArcLogSuc2.flush()
 
+#----------------------------- INICIALIZAR -----------------------------------------
 def CargaSuc1(): 
 	global ArcFisiSucu1, ArcLogSuc1
 	os.system("cls")

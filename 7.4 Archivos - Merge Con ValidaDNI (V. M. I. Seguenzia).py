@@ -23,7 +23,7 @@ def validaRangoEntero(nro, min,max,fin):
     except:
         return True 
 
-
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------
 def BuscaSecFisio(hc):  #hago búsqueda secuencial x q como puedo cargar varios registros en el proceso de carga, van a la cola desordenados 
 							# y ordena luego... 
     global ArcFisiFisio, ArcLogFisio 
@@ -60,17 +60,6 @@ def BuscaSecTrau(hc):  #hago búsqueda secuencial x q como puedo cargar varios r
          return -1
     else:
     	return -1
-
-
-def formatearHistoria(vrHist):
-	vrHist.Nhc= str(vrHist.Nhc)
-	vrHist.Nhc= vrHist.Nhc.ljust(4, ' ')  
-	vrHist.Dni = vrHist.Dni.ljust(10, ' ')
-	vrHist.Diagnostico = vrHist.Diagnostico.ljust(30, ' ')
-	#vrHist.Fec = str(vrHist.Fec)
-	vrHist.Fec =vrHist.Fec.ljust(10, ' ')
-	vrHist.Medico= str(vrHist.Medico)
-	vrHist.Medico= vrHist.Medico.ljust(4, ' ') 
 
 def Ordenafisio():
 	global ArcFisiFisio, ArcLogFisio 
@@ -111,6 +100,21 @@ def Ordenatrau():
 				ArcLogTrauma.seek (j*tamReg, 0)
 				pickle.dump(auxi, ArcLogTrauma)
 				ArcLogTrauma.flush()
+
+#----------------------------- INICIALIZAR -----------------------------------------
+# 
+# 			
+def formatearHistoria(vrHist):
+	vrHist.Nhc= str(vrHist.Nhc)
+	vrHist.Nhc= vrHist.Nhc.ljust(4, ' ')  
+	vrHist.Dni = vrHist.Dni.ljust(10, ' ')
+	vrHist.Diagnostico = vrHist.Diagnostico.ljust(30, ' ')
+	#vrHist.Fec = str(vrHist.Fec)
+	vrHist.Fec =vrHist.Fec.ljust(10, ' ')
+	vrHist.Medico= str(vrHist.Medico)
+	vrHist.Medico= vrHist.Medico.ljust(4, ' ') 
+
+
 
 def Cargafisio():  # se valida con una búsqueda que si el numero de Historia Clinica ya exite en alguno de los dos archivos!!!
 					# el Dni debe ser el  mismo. No ingresarlo nuevamente x q podría ingresar otro dni
