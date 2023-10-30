@@ -1,14 +1,13 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 #Este programa es para realizar todos los que se piden en el final del hotsale considerando que
 #los datos en los archivos de base ya están previamente cargados, empresas y productos.
-
 
 from io import *  	#modulo que permite trabajar con el sistema de archivos
 import pickle 		#librería para as operaciones de lectura y escritura
 import os,sys, datetime
 from datetime import date
 
-
-
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 class empresa(): 	#Declarar el registro empresa
 	def __init__(self):
 		self.code=0

@@ -1,9 +1,12 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 #examen final del 26/02/2014 - Multas de tránsito
 import os
 import pickle
 import os.path
 import datetime
 from datetime import date  
+
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 class Multa:
     def __init__(self):  # constructor dentro de la clase multa
         self.codigo = 0
@@ -136,7 +139,7 @@ def ordenaMultasxCodigo():  #ordena por campo codigo
                 pickle.dump(auxi, ArcLogMul)
                 ArcLogMul.flush()
 
-
+#----------------------------- INICIALIZAR -----------------------------------------
         
 def ingresa(cod,vrMul):
 		vrMul.codigo = int(cod)

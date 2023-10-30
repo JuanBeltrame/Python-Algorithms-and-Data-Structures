@@ -1,3 +1,4 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 from io import *  	#modulo que permite trabahar con el sistema de archivos
 import pickle 		#librería para seliarzar
 
@@ -7,7 +8,7 @@ import os,sys, datetime
 from datetime import date
 
 
-
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 class empresa(): 	#Declarar el registro empresa
 	def __init__(self):
 		self.code=0
@@ -33,7 +34,7 @@ def validorangoentero(nro, desde, hasta):
 	except:
 		return True      #
 
-
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------
 def busece(CodEmp):
 	global aemp
 	global afemp

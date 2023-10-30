@@ -1,7 +1,9 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 import os
 import pickle
 from random import randint
 
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 class Juicio:
     def __init__(self):
         self.nro_juicio = 0

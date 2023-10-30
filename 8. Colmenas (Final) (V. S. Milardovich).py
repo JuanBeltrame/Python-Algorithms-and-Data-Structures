@@ -1,8 +1,10 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 import os
 import pickle
 import os.path
 import datetime
 
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 '''
 Creo los registros para Colmena y Zona, de acuerdo a lo que explicita el enunciado
 '''
@@ -14,12 +16,11 @@ class Colmena:
         self.estado = False
         self.porcentajes_produccion = [[0 for x in range(10)] for y in range(4)]
 
-
 class Zona:
     def __init__(self):
         self.descripcion = ""
 
-
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 '''
 Creo los procedimientos para formatear cada uno de los registros anteriormente mencionados
 '''
@@ -30,7 +31,6 @@ def formatearColmena(colmena):
     for i in range(4):
         for j in range(10):
             colmena.porcentajes_produccion[i][j] = str(colmena.porcentajes_produccion[i][j]).ljust(3, ' ')
-
 
 def formatearZona(zona):
     zona.descripcion = str(zona.descripcion).ljust(30, ' ')

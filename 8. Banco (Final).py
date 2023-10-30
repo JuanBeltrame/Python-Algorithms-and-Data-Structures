@@ -1,8 +1,9 @@
-
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 import os
 import pickle
 import os.path
 
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 class Cliente:
     def __init__(self):
         self.dni: 0

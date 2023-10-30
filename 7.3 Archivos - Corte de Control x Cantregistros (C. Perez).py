@@ -1,12 +1,11 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 import sys
 import pickle
 import os.path
 import datetime
 
-
-
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 # Definición de Registros 
-
 class RorganizaA:
 	def __init__(self):
 		self.codSoc=" "
@@ -14,7 +13,8 @@ class RorganizaA:
 		self.nya=" "
 		self.te=" "
 		self.cuota="0.00"
- 		
+
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 
 def Asigna():
 	global alA

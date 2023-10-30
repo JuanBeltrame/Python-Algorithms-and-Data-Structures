@@ -1,8 +1,10 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 import os
 import pickle
 import datetime
 from random import randint
 
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 medicionesDiarias = [[0 for x in range(2)] for y in range(15)]
 
 class Medicion:
@@ -11,6 +13,7 @@ class Medicion:
         self.nro_zona = 0
         self.snap = 0.0
 
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 def formatearMedicion(medicion):
     medicion.fecha = str(medicion.fecha).ljust(20, ' ')
     medicion.nro_zona = str(medicion.nro_zona).ljust(2, ' ')

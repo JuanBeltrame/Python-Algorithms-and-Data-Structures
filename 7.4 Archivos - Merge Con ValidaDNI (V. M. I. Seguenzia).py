@@ -1,9 +1,11 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 # merge sobre archivos examen clínica  y valida los DNI    2023
 import os
 import pickle
 import os.path
 import datetime
 
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 class Historia:
 	def __init__(self):
 		self.Nhc = 0
@@ -13,6 +15,7 @@ class Historia:
 		self.Medico= 0
 		self.Activo= " " # S-N 
 
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 def validaRangoEntero(nro, min,max,fin):
     try:              
         nro = int(nro)      
@@ -22,6 +25,16 @@ def validaRangoEntero(nro, min,max,fin):
             return True  
     except:
         return True 
+
+def formatearHistoria(vrHist):
+	vrHist.Nhc= str(vrHist.Nhc)
+	vrHist.Nhc= vrHist.Nhc.ljust(4, ' ')  
+	vrHist.Dni = vrHist.Dni.ljust(10, ' ')
+	vrHist.Diagnostico = vrHist.Diagnostico.ljust(30, ' ')
+	#vrHist.Fec = str(vrHist.Fec)
+	vrHist.Fec =vrHist.Fec.ljust(10, ' ')
+	vrHist.Medico= str(vrHist.Medico)
+	vrHist.Medico= vrHist.Medico.ljust(4, ' ') 
 
 #----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------
 def BuscaSecFisio(hc):  #hago búsqueda secuencial x q como puedo cargar varios registros en el proceso de carga, van a la cola desordenados 
@@ -102,18 +115,6 @@ def Ordenatrau():
 				ArcLogTrauma.flush()
 
 #----------------------------- INICIALIZAR -----------------------------------------
-# 
-# 			
-def formatearHistoria(vrHist):
-	vrHist.Nhc= str(vrHist.Nhc)
-	vrHist.Nhc= vrHist.Nhc.ljust(4, ' ')  
-	vrHist.Dni = vrHist.Dni.ljust(10, ' ')
-	vrHist.Diagnostico = vrHist.Diagnostico.ljust(30, ' ')
-	#vrHist.Fec = str(vrHist.Fec)
-	vrHist.Fec =vrHist.Fec.ljust(10, ' ')
-	vrHist.Medico= str(vrHist.Medico)
-	vrHist.Medico= vrHist.Medico.ljust(4, ' ') 
-
 
 
 def Cargafisio():  # se valida con una búsqueda que si el numero de Historia Clinica ya exite en alguno de los dos archivos!!!

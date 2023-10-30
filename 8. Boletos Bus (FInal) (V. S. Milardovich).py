@@ -155,7 +155,6 @@ def reporte(afBoleto, alBoleto, mes):
 def mostrarBoleto(a):
 	print(a.nro_tarjeta.strip(), a.dia.strip(), a.mes.strip(), a.hora.strip(), a.nro_colectivo.strip(), a.monto_viaje.strip())
 
-
 #----------------------------- MENU DE OPCIONES -----------------------------------------           
 def menuPrincipal():
     opt = 1

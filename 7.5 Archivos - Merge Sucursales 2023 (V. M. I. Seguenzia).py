@@ -1,8 +1,10 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 # merge sobre archivos examen SUCURSALES
 import os
 import pickle
 import os.path
 
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 class Sucursal:
 	def __init__(self):
 		self.codArt = 0
@@ -14,7 +16,7 @@ class Existencia:
 		self.cantS1= 0
 		self.cantS2= 0
 		
-
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 def validaRangoEntero(nro, min,max,fin):
     try:              
         nro = int(nro)      
@@ -24,7 +26,6 @@ def validaRangoEntero(nro, min,max,fin):
             return True  
     except:
         return True 
-
 
 def formatearSucursal(vrSuc):
 	vrSuc.codArt= str(vrSuc.codArt)
