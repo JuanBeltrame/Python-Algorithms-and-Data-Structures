@@ -333,7 +333,7 @@ def listado():
 		print("  ",d.nl," ","{0:.2f}".format(d.p[0])," ","{0:.2f}".format(d.p[1]),"{0:.2f}".format(d.p[2])," ","{0:.2f}".format(d.vr))
 	os.system("pause")
 
-#----------------------------- MENU DE OPCIONES -----------------------------------------       
+   
 
 #----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 global aflote, afmod, afdes                   # archivos

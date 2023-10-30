@@ -122,7 +122,7 @@ def venta(p,cant,pp):
 		print("stock insuficiente ")
 		tec=input()"""
 
-
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO ----------------------------------------- 
 def busece(CodEmp):
 	global aemp
 	global afemp

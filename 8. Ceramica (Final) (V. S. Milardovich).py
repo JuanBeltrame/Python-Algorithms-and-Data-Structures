@@ -1,7 +1,8 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 import os
 import pickle
 import os.path
-
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 '''
 Creo los registros para Pieza, Material y Pedido, de acuerdo a lo que explicita el enunciado
 '''
@@ -23,7 +24,8 @@ class Pedido:
         self.nro_pieza = 0
         self.cant_piezas = 0
         self.monto = 0.0
-        
+
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------     
 '''
 Creo los procedimientos para formatear cada uno de los registros anteriormente mencionados
 '''
@@ -43,6 +45,10 @@ def formatearPedido(pedido):
     pedido.nro_pieza = str(pedido.nro_pieza).ljust(2, ' ')
     pedido.cant_piezas = str(pedido.cant_piezas).ljust(2, ' ')
     pedido.monto = str(pedido.monto).ljust(6, ' ')
+
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------  
+
+#----------------------------- INICIALIZAR ----------------------------------------- 
 '''
 Si bien esto no estaba en el enunciado, creo este método para poder tener información en el archivo de materiales.
 Lo único que hace este método ese iterar el arreglo y cargar los valores del mismo en el archivo materiales.dat
@@ -77,7 +83,8 @@ def inicializarMateriales():
         formatearMaterial(auxMat)
         pickle.dump(auxMat, alMateriales)
         alMateriales.flush()
-        
+
+#----------------------------- CARGAS/ALTAS -----------------------------------------    
 '''
 Procedimiento para cargar una nueva pieza. Lo que hago es posicionarme utilizando el método seek al final del archivo. Para saber cuál es el final del archivo utilizo el método os.path.getsize()
 '''        
@@ -101,23 +108,11 @@ def cargarPieza():
     pickle.dump(pieza, alPiezas)
     alPiezas.flush()
 
-'''
-Procedimiento del tipo "helper", lo que hace es posicionarse a en la "fila" de nuestro archivo donde se encuentra el número de pieza que le pasamos como argumento (nroPieza).
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
 
-Recordemos que, si el número de pieza es autoincremental que comienza en 1, la pieza con el primer número de pieza (1) va a estar en la posición 0. Luego, la pieza con el segundo número de pieza (2) va a estar en la posición 0 + el tamaño en bytes que ocupe una pieza. 
+#----------------------------- BAJA LOGICA -----------------------------------------
 
-La pieza en la posición n va a estar en la posición de la pieza n-1 + el tamaño que ocupe una pieza (al usar el procedimiento formatear, todas las piezas ocupan el mismo tamaño en bytes).
-'''
-def posicionarseEnPieza(nroPieza):
-    global alPiezas, afPiezas
-    
-    alPiezas.seek(0)
-    aux = pickle.load(alPiezas)
-    tamReg = alPiezas.tell() 
-    t = os.path.getsize(afPiezas)
-    
-    alPiezas.seek((nroPieza-1)*tamReg)
-
+#----------------------------- CALCULOS -----------------------------------------
 '''
 Función que calcula el precio de una pieza, dado el número de la misma. Nos posicionamos en el lugar del archivo donde se encuentre la pieza que corresponda utilizando el procedimiento posicionarseEnPieza, luego cargamos esa información en memoria, y realizamos el cálculo del precio según la cantidad de materiales que contenga la pieza.
 
@@ -140,30 +135,21 @@ def calcularPrecio(nroPieza):
     return float(auxPrecio)
 
 '''
-Mostramos la información de una pieza en particular.
-'''
-def mostrarPieza(vrPieza, nroPieza):
-    print(vrPieza.nombre_pieza.strip(), str(calcularPrecio(nroPieza)))
+Procedimiento del tipo "helper", lo que hace es posicionarse a en la "fila" de nuestro archivo donde se encuentra el número de pieza que le pasamos como argumento (nroPieza).
 
+Recordemos que, si el número de pieza es autoincremental que comienza en 1, la pieza con el primer número de pieza (1) va a estar en la posición 0. Luego, la pieza con el segundo número de pieza (2) va a estar en la posición 0 + el tamaño en bytes que ocupe una pieza. 
+
+La pieza en la posición n va a estar en la posición de la pieza n-1 + el tamaño que ocupe una pieza (al usar el procedimiento formatear, todas las piezas ocupan el mismo tamaño en bytes).
 '''
-Listamos las piezas. Se añadió un argumento de tipo booleano llamado "filtrar", para poder reutilizar el procedimiento tanto en el punto 2 como en el 4.
-'''
-def listarPieza(filtrar=False):
-    global afPiezas, alPiezas
+def posicionarseEnPieza(nroPieza):
+    global alPiezas, afPiezas
+    
+    alPiezas.seek(0)
+    aux = pickle.load(alPiezas)
+    tamReg = alPiezas.tell() 
     t = os.path.getsize(afPiezas)
-    if t==0:
-        print ("No hay piezas registradas")
-    else:
-        print ("Lista de Piezas")
-        print ("----------------")
-        alPiezas.seek(0)
-        i = 1
-        while alPiezas.tell()<t:
-            vrPieza = pickle.load(alPiezas)
-            if(not filtrar or (filtrar and int(vrPieza.stock_disponible) < vrPieza.stock_pendiente)):
-                mostrarPieza(vrPieza, i)
-            i += 1
-    print()
+    
+    alPiezas.seek((nroPieza-1)*tamReg)
 
 '''
 Lógica para realizar un pedido. Incluye modificar el stock de una pieza si se confirma el pedido de la misma, o bien modificar el campo de stock a pedir si no se dispone de stock suficiente.
@@ -212,7 +198,35 @@ def pedidos():
                 
         
         nro_pieza = int(input("Ingrese el número de pieza a pedir, ingrese 0 para volver a la sección anterior "))
-    
+                
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
+'''
+Listamos las piezas. Se añadió un argumento de tipo booleano llamado "filtrar", para poder reutilizar el procedimiento tanto en el punto 2 como en el 4.
+'''
+def listarPieza(filtrar=False):
+    global afPiezas, alPiezas
+    t = os.path.getsize(afPiezas)
+    if t==0:
+        print ("No hay piezas registradas")
+    else:
+        print ("Lista de Piezas")
+        print ("----------------")
+        alPiezas.seek(0)
+        i = 1
+        while alPiezas.tell()<t:
+            vrPieza = pickle.load(alPiezas)
+            if(not filtrar or (filtrar and int(vrPieza.stock_disponible) < vrPieza.stock_pendiente)):
+                mostrarPieza(vrPieza, i)
+            i += 1
+    print()
+
+'''
+Mostramos la información de una pieza en particular.
+'''
+def mostrarPieza(vrPieza, nroPieza):
+    print(vrPieza.nombre_pieza.strip(), str(calcularPrecio(nroPieza)))
+
+#----------------------------- MENU DE OPCIONES -----------------------------------------    
 def menuPrincipal():
     global afPiezas, alPiezas
     opt = 1
@@ -228,10 +242,11 @@ def menuPrincipal():
         elif (opt == 3):
             pedidos()
         elif (opt == 4):
-            listarPieza(True)           
-        
-            
+            listarPieza(True)       
 
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
+
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 afPiezas = "./piezas.dat"  
 if not os.path.exists(afPiezas):   
 	alPiezas = open (afPiezas, "w+b")   

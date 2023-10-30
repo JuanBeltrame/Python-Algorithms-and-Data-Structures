@@ -1,3 +1,4 @@
+#------------------- IMPORTAR LIBRERIAS ----------------------------------
 # Apertura de librerías de Python necesarias para la ejecución
 import sys
 import pickle
@@ -5,14 +6,12 @@ import os.path
 import datetime
 
 
-
+#----------------------- DEFINICION DE CLASES/REGISTROS ----------------------------------
 # Definición de Registros (uno por cada archivo)
-
 class Rgraduacion:
 	def __init__(self):
 		self.noms=" "
 		self.valor=[0]*3
-
 		
 class Rasistente:
 	def __init__(self):
@@ -23,24 +22,7 @@ class Rasistente:
 		self.pago=" "
 		self.emitido=" "
 
-# CREACIÓN Y APERTURA DE ARCHIVOS
-
-def Asignar():
-	global ala
-	global afa
-	global alg
-	global afg
-	afa="c:\\ayed\\asistentes.dat"
-	afg="c:\\ayed\\graduaciones.dat"
-	if os.path.exists(afa):
-		ala=open(afa,"r+b")
-	else:
-		ala=open(afa,"w+b")
-	if os.path.exists(afg):
-		alg=open(afg,"r+b")
-	else:
-		alg=open(afg,"w+b")
-
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 def validaRangoEntero(nro, desde,hasta):
 	try:              # trata de hacer lo que sigue, si da error se ejecuta el except
 		int(nro)      
@@ -51,12 +33,55 @@ def validaRangoEntero(nro, desde,hasta):
 	except:
 		return True      #validación incorrecta, retorna verdadero para que siga en el while que valida
 
-
 def validonumeros(nro,desde,hasta):
 	int(nro)
 	while int(nro) < desde and int(nro) < hasta:
 		op=input()
 
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO ----------------------------------------- 
+# Función de Búsqueda secuencial de dni en Asistentes.dat
+def buscasis(d):
+	global ala
+	global afa
+	global ra
+	TamarA=os.path.getsize(afa)
+	ala.seek(0,0)
+	posr=ala.tell()
+	ra=pickle.load(ala)
+	while (ala.tell() < TamarA) and (ra.dni != d):
+		posr=ala.tell()
+		ra=pickle.load(ala)
+	if ra.dni== d:
+		b=posr
+	else:
+		b=-1
+	return b
+
+# función de busueda secuencial, por dos campos dni y código de salón
+def existe(d,c):
+	global ala
+	global afa
+
+	Tamala=os.path.getsize(afa)
+	ex=-1
+	if Tamala == 0:
+		print("Archivo vacio ")
+	else:
+		ala.seek(0,0)
+		posa=ala.tell()
+		ra=pickle.load(ala)
+		while (ala.tell() < Tamala) and ((ra.dni!=d) and (ra.cs!= c)):
+			posa=ala.tell()
+			ra=pickle.load(ala)
+		if (ra.dni==d) and (ra.cs== c):
+			ex=posa
+		else:
+			ex=-1
+	return ex
+
+#----------------------------- INICIALIZAR -----------------------------------------
+
+#----------------------------- CARGAS/ALTAS -----------------------------------------
 # Procedimiento de carga en Graduaciones.dat, por enunciado se encuentra con datos cargados.
 def Cargasalones():
 	global alg
@@ -91,6 +116,29 @@ def Cargasalones():
 	print("**GRACIAS POR INGRESAR LOS DATOS DE SALONES Y VALOR DE ENTRADA**")
 	os.system("cls")
 
+
+# CREACIÓN Y APERTURA DE ARCHIVOS
+
+def Asignar():
+	global ala
+	global afa
+	global alg
+	global afg
+	afa="c:\\ayed\\asistentes.dat"
+	afg="c:\\ayed\\graduaciones.dat"
+	if os.path.exists(afa):
+		ala=open(afa,"r+b")
+	else:
+		ala=open(afa,"w+b")
+	if os.path.exists(afg):
+		alg=open(afg,"r+b")
+	else:
+		alg=open(afg,"w+b")
+
+
+
+
+
 def Consultas():
 	global alg
 	global afg
@@ -122,45 +170,7 @@ def armorega(r, d, c):
 	r.pago="N"
 	r.emitido="N"
 
-# Función de Búsqueda secuencial de dni en Asistentes.dat
-def buscasis(d):
-	global ala
-	global afa
-	global ra
-	TamarA=os.path.getsize(afa)
-	ala.seek(0,0)
-	posr=ala.tell()
-	ra=pickle.load(ala)
-	while (ala.tell() < TamarA) and (ra.dni != d):
-		posr=ala.tell()
-		ra=pickle.load(ala)
-	if ra.dni== d:
-		b=posr
-	else:
-		b=-1
-	return b
 
-# función de busueda ecuencial, por dos campos dni y código de salón
-def existe(d,c):
-	global ala
-	global afa
-
-	Tamala=os.path.getsize(afa)
-	ex=-1
-	if Tamala == 0:
-		print("Archivo vacio ")
-	else:
-		ala.seek(0,0)
-		posa=ala.tell()
-		ra=pickle.load(ala)
-		while (ala.tell() < Tamala) and ((ra.dni!=d) and (ra.cs!= c)):
-			posa=ala.tell()
-			ra=pickle.load(ala)
-		if (ra.dni==d) and (ra.cs== c):
-			ex=posa
-		else:
-			ex=-1
-	return ex
 			
 # Realiza las Inscripciones a las graduaciones de los asistentes
 def Inscripción():
