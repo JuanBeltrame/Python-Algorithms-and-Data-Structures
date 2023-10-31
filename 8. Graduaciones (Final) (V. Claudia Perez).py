@@ -118,7 +118,6 @@ def Cargasalones():
 
 
 # CREACIÓN Y APERTURA DE ARCHIVOS
-
 def Asignar():
 	global ala
 	global afa
@@ -134,10 +133,6 @@ def Asignar():
 		alg=open(afg,"r+b")
 	else:
 		alg=open(afg,"w+b")
-
-
-
-
 
 def Consultas():
 	global alg
@@ -159,7 +154,6 @@ def Consultas():
 			input()
 
 # Genera y formatea el registro de asistentes para luego inscribirlo (grabar en archivo)
-
 def armorega(r, d, c):
 	r.dni=d.ljust(8," ")
 	r.cs=c
@@ -169,35 +163,33 @@ def armorega(r, d, c):
 		r.cat=int(input("Inválida - Ingrese categoría 1-2-3 "))
 	r.pago="N"
 	r.emitido="N"
-
-
-			
+		
 # Realiza las Inscripciones a las graduaciones de los asistentes
 def Inscripción():
-	global ala
-	global afa
-	print("**** INSCRIPCIONES A LAS GRADUACIONES ****")
-	print("")
-	ra=Rasistente()
-	dni=input("Ingrese dni / 0 para salir ")
-	ala.seek(0,2)
-	while dni != "0":
- 		cs=int(input("Ingrese código de salón: "))
- 		while (cs < 1) and (cs > 30):
- 			cs=int(input("Inválida - Ingrese código de salón: "))
- 		pos_asist=existe(dni,cs)
- 		if pos_asist == -1:
- 			armorega(ra,dni,cs)
- 			print(ra.dni," ",ra.cs," ",ra.nya," ",ra.cat," ",ra.pago," ",ra.emitido)
- 			input()
- 			pickle.dump(ra,ala)
- 			ala.flush()
- 			print("*** Inscripción exitosa ***")
- 			input()
- 		else:
- 			print("ya está inscripto el dni en esa categoría")
- 			print(" ")
- 		dni=input("Ingrese dni / 0 para sair ")
+    global ala
+    global afa
+    print("**** INSCRIPCIONES A LAS GRADUACIONES ****")
+    print("")
+    ra = Rasistente()
+    dni = input("Ingrese dni / 0 para salir ")
+    ala.seek(0, 2)
+    while dni != "0":
+        cs = int(input("Ingrese código de salón: "))
+        while (cs < 1) and (cs > 30):
+            cs = int(input("Inválida - Ingrese código de salón: "))
+        pos_asist = existe(dni, cs)
+        if pos_asist == -1:
+            armorega(ra, dni, cs)
+            print(ra.dni, " ", ra.cs, " ", ra.nya, " ", ra.cat, " ", ra.pago, " ", ra.emitido)
+            input()
+            pickle.dump(ra, ala)
+            ala.flush()
+            print("*** Inscripción exitosa ***")
+            input()
+        else:
+            print("ya está inscripto el dni en esa categoría")
+            print(" ")
+        dni = input("Ingrese dni / 0 para sair ")
 
 # Reacudación por salón y categoría
 # Se utiliza una 2 arreglos bidimensionales de 30 filas (salones), 3 columnas(categorias), como acumuladores para los totales recuadados y adeudados

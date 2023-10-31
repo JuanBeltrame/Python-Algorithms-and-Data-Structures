@@ -59,6 +59,12 @@ def busecp(CodProd):
 			pos=aprod.tell()
 	return pos		
 
+#----------------------------- INICIALIZAR -----------------------------------------
+
+#----------------------------- CARGAS/ALTAS -----------------------------------------
+
+
+
 
 # programa principal
 global aemp, aprod

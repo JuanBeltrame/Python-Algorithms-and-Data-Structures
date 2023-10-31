@@ -19,6 +19,9 @@ def formatearMedicion(medicion):
     medicion.nro_zona = str(medicion.nro_zona).ljust(2, ' ')
     medicion.snap = str(medicion.snap).ljust(4, ' ')
 
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------  
+
+#----------------------------- INICIALIZAR ----------------------------------------- 
 def inicializarMediciones():
     global alMediciones
     alMediciones.seek(0)
@@ -29,6 +32,8 @@ def inicializarMediciones():
         formatearMedicion(aux)
         pickle.dump(aux, alMediciones)
         alMediciones.flush()
+
+#----------------------------- CARGAS/ALTAS -----------------------------------------
 
 def calidadAire(snap):
     if (snap <= 50):

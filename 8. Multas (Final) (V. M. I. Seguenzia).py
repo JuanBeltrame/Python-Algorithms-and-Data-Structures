@@ -25,8 +25,7 @@ class Tipo:
         self.descripción = " "  # no lo pide el enunciado pero es conveniente saber que infracción es.
         self.valor = 0.00
 
-
-
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 def validargrua():
     letra = input("Ingrese si fue acarreado con Grua -S si   N-no : ").upper()
     while (letra !='S') and (letra !='N') :
@@ -63,7 +62,6 @@ def validarFechaVto():
         except ValueError:
             print("fecha inválida")
     return fecha
-
 
 def formatearMulta(vrMul):
 	vrMul.codigo= str(vrMul.codigo)
@@ -140,7 +138,10 @@ def ordenaMultasxCodigo():  #ordena por campo codigo
                 ArcLogMul.flush()
 
 #----------------------------- INICIALIZAR -----------------------------------------
-        
+
+#----------------------------- CARGAS/ALTAS -----------------------------------------
+
+
 def ingresa(cod,vrMul):
 		vrMul.codigo = int(cod)
 		vrMul.patente = input("Patente: ")

@@ -35,50 +35,7 @@ def formatearColmena(colmena):
 def formatearZona(zona):
     zona.descripcion = str(zona.descripcion).ljust(30, ' ')
 
-
-'''
-Si bien el enunciado dice que el archivo de zonas ya viene cargado, creo un procedimiento para llenar el archivo cada vez que se ejecute el programa, para que exista información para interactuar con el programa.
-'''
-def inicializarZonas():
-    global alZonas, afZonas
-
-    zonas = [
-        'Zona 1',
-        'Zona 2',
-        'Zona 3',
-        'Zona 4',
-        'Zona 5',
-        'Zona 6'
-    ]
-
-    alZonas.seek(0)
-
-    for i in range(6):
-        auxZona = Zona()
-        auxZona.descripcion = zonas[i]
-        formatearZona(auxZona)
-        pickle.dump(auxZona, alZonas)
-        alZonas.flush()
-
-def ordenarColmenas():
-    global alColmenas, afColmenas
-    alColmenas.seek (0, 0)
-    aux = pickle.load(alColmenas)
-    tamReg = alColmenas.tell() 
-    t = os.path.getsize(afColmenas)
-    cant = int(t / tamReg)  
-    for i in range(0, cant-1):
-        for j in range (i+1, cant):
-            alColmenas.seek (i*tamReg, 0)
-            auxi = pickle.load(alColmenas)
-            alColmenas.seek (j*tamReg, 0)
-            auxj = pickle.load(alColmenas)
-            if (auxi.codigo_colmena > auxj.codigo_colmena):
-                alColmenas.seek (i*tamReg, 0)
-                pickle.dump(auxj, alColmenas)
-                alColmenas.seek (j*tamReg, 0)
-                pickle.dump(auxi,alColmenas)
-                alColmenas.flush()
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO -----------------------------------------  
 '''
 Esta función auxiliar nos va a servir para modificar las colmenas. Ver archivo explicacion.txt para más info
 '''
@@ -125,6 +82,56 @@ def colmenaExiste(codigoColmena):
     else:
         return False
 
+def ordenarColmenas():
+    global alColmenas, afColmenas
+    alColmenas.seek (0, 0)
+    aux = pickle.load(alColmenas)
+    tamReg = alColmenas.tell() 
+    t = os.path.getsize(afColmenas)
+    cant = int(t / tamReg)  
+    for i in range(0, cant-1):
+        for j in range (i+1, cant):
+            alColmenas.seek (i*tamReg, 0)
+            auxi = pickle.load(alColmenas)
+            alColmenas.seek (j*tamReg, 0)
+            auxj = pickle.load(alColmenas)
+            if (auxi.codigo_colmena > auxj.codigo_colmena):
+                alColmenas.seek (i*tamReg, 0)
+                pickle.dump(auxj, alColmenas)
+                alColmenas.seek (j*tamReg, 0)
+                pickle.dump(auxi,alColmenas)
+                alColmenas.flush()
+
+#----------------------------- INICIALIZAR ----------------------------------------- 
+'''
+Si bien el enunciado dice que el archivo de zonas ya viene cargado, creo un procedimiento para llenar el archivo cada vez que se ejecute el programa, para que exista información para interactuar con el programa.
+'''
+def inicializarZonas():
+    global alZonas, afZonas
+
+    zonas = [
+        'Zona 1',
+        'Zona 2',
+        'Zona 3',
+        'Zona 4',
+        'Zona 5',
+        'Zona 6'
+    ]
+
+    alZonas.seek(0)
+
+    for i in range(6):
+        auxZona = Zona()
+        auxZona.descripcion = zonas[i]
+        formatearZona(auxZona)
+        pickle.dump(auxZona, alZonas)
+        alZonas.flush()
+
+#----------------------------- CARGAS/ALTAS -----------------------------------------
+
+
+
+
 
 def zonaExiste(zona):
     global afZonas, alZonas
@@ -137,7 +144,6 @@ def zonaExiste(zona):
         return True
     else:
         return False
-
 
 def adquirirColmena():
     global alColmenas, afColmenas
@@ -175,7 +181,6 @@ def adquirirColmena():
 
         if (opt.lower() == "n"):
             continuar = False
-
 
 def cosecha():
     global alColmenas, afColmenas, arProduccion, vrColmena
@@ -246,7 +251,6 @@ def menuPrincipal():
             cosecha()
         elif opt == 3:
             inactivas()
-
 
 vrColmena = Colmena()
 arProduccion = [

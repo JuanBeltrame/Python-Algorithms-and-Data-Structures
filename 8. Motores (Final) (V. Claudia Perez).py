@@ -125,6 +125,7 @@ def ordeno():
 				amod.seek(j*Tamregm,0)
 				pickle.dump(auxi,amod)
 				amod.flush()
+
 #----------------------------- INICIALIZAR -----------------------------------------
 # inicializacion en cero, al arreglo Prom (acumulacion y calculo de promedios pedidos)
 def inicializo(prome):
@@ -332,8 +333,6 @@ def listado():
 			print(d.fd[i], end="")
 		print("  ",d.nl," ","{0:.2f}".format(d.p[0])," ","{0:.2f}".format(d.p[1]),"{0:.2f}".format(d.p[2])," ","{0:.2f}".format(d.vr))
 	os.system("pause")
-
-   
 
 #----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 global aflote, afmod, afdes                   # archivos

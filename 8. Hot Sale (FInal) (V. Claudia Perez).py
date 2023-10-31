@@ -23,7 +23,75 @@ class producto():
 		self.precioLiq = 0.00
 		self. codep = 0
 
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
+def validarFecha():
+    flag = True
+    while flag:
+        try:
+            fecha = input("Ingresa una fecha en el formato aaaa-mm-dd: ")
+            datetime.datetime.strptime(fecha, '%Y-%m-%d')
+            print("Fecha valida")
+            flag = False 
+        except ValueError:
+            print("Fecha invalida")
+    tec=input()
+    return fecha	
 
+def fechavalida(f):
+	if f <= str(date.today()):
+		return True
+	else:
+		return False
+
+def validaRangoEntero(nro, desde, hasta):
+	try:              # trata de hacer lo que sigue, si da error se ejecuta el except
+		int(nro)      
+		if int(nro) >= desde and int(nro) <= hasta:
+			return False #validación correcta, retorna falso para que salga del while que valida
+		else:
+			return True  #validación incorrecta, retorna verdadero para que siga en el while que valida
+	except:
+		return True      #
+
+#----------------------------- BUSQUEDAS Y ORDENAMIENTO ----------------------------------------- 
+def busece(CodEmp):
+	global aemp
+	global afemp
+	finemp=os.path.getsize(afemp)
+	aemp.seek(0,0)
+	pos=-1
+	e=aemp.tell()
+	re=pickle.load(aemp)
+	while(aemp.tell() < finemp) and (re.code!=CodEmp):
+		e=aemp.tell()
+		re=pickle.load(aemp)
+	if (re.code == CodEmp):
+		pos=e    #aemp.tell()
+	else:
+		pos=-1
+	return pos	
+
+def busecp(CodProd):
+	global aprod
+	global afprod
+	finprod=os.path.getsize(afprod)
+	aprod.seek(0,0)
+	pos=-1
+	p=aprod.tell()
+	rp=pickle.load(aprod)
+
+	while(aprod.tell() < finprod) and (rp.codp != CodProd):
+		p=aprod.tell()
+		rp=pickle.load(aprod)
+	if (rp.codp == CodProd):
+		pos=p
+	else:
+		pos=-1
+	return pos		
+
+#----------------------------- INICIALIZAR -----------------------------------------
+
+#----------------------------- CARGAS/ALTAS -----------------------------------------
 def muestrop(pr):
 	if pr.stock==0:
 		print(pr.codp," ",pr.descp," ",pr.precio," ",pr.precioLiq)
@@ -64,20 +132,6 @@ def mayempresa():
 		print("La empresa con mas productos vendidos es: ",mayemp," con: ",maycant)
 	os.system("pause")
 
-
-def validarFecha():
-    flag = True
-    while flag:
-        try:
-            fecha = input("Ingresa una fecha en el formato aaaa-mm-dd: ")
-            datetime.datetime.strptime(fecha, '%Y-%m-%d')
-            print("Fecha valida")
-            flag = False 
-        except ValueError:
-            print("Fecha invalida")
-    tec=input()
-    return fecha		
-
 def MuestroProd(ce):
 	rrp=producto()
 	finprod=os.path.getsize(afprod)
@@ -92,7 +146,6 @@ def MuestroProd(ce):
 			if rpp.codep == ce:
 				print(rpp.codp," ",rpp.descp," ",rpp.stock," ",rpp.precio," ",rpp.precioLiq, " ", rpp.codep)
 			rpp=pickle.load(aprod)
-
 
 def venta(p,cant,pp):
 	global afprod
@@ -120,43 +173,6 @@ def venta(p,cant,pp):
 	else:
 		print("stock insuficiente ")
 		tec=input()"""
-
-#----------------------------- BUSQUEDAS Y ORDENAMIENTO ----------------------------------------- 
-def busece(CodEmp):
-	global aemp
-	global afemp
-	finemp=os.path.getsize(afemp)
-	aemp.seek(0,0)
-	pos=-1
-	e=aemp.tell()
-	re=pickle.load(aemp)
-	while(aemp.tell() < finemp) and (re.code!=CodEmp):
-		e=aemp.tell()
-		re=pickle.load(aemp)
-	if (re.code == CodEmp):
-		pos=e    #aemp.tell()
-	else:
-		pos=-1
-	return pos	
-
-def busecp(CodProd):
-	global aprod
-	global afprod
-	finprod=os.path.getsize(afprod)
-	aprod.seek(0,0)
-	pos=-1
-	p=aprod.tell()
-	rp=pickle.load(aprod)
-
-	while(aprod.tell() < finprod) and (rp.codp != CodProd):
-		p=aprod.tell()
-		rp=pickle.load(aprod)
-	if (rp.codp == CodProd):
-		pos=p
-	else:
-		pos=-1
-	return pos		
-
 
 def pantalla():
 	global afemp
@@ -219,25 +235,6 @@ def pantalla():
 				print("No desea realizar la compra")
 		else:
 			print("Codigo de Empresa no encontrado")
-
-
-def fechavalida(f):
-	if f <= str(date.today()):
-		return True
-	else:
-		return False
-
-def validaRangoEntero(nro, desde, hasta):
-	try:              # trata de hacer lo que sigue, si da error se ejecuta el except
-		int(nro)      
-		if int(nro) >= desde and int(nro) <= hasta:
-			return False #validación correcta, retorna falso para que salga del while que valida
-		else:
-			return True  #validación incorrecta, retorna verdadero para que siga en el while que valida
-	except:
-		return True      #
-
-
 
 def menu():
 	global afemp

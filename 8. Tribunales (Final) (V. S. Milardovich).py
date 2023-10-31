@@ -22,6 +22,7 @@ class Actuacion:
         self.cant_hs = 0.0
         self.gastos = 0.0
 
+#----------------------------- VALIDACIONES DATOS DE ENTRADA + FORMATEO -----------------------------------------
 def formatearJuicio(juicio):
     juicio.nro_juicio = str(juicio.nro_juicio).ljust(7, ' ')
     juicio.id = str(juicio.id).ljust(7, ' ')
@@ -35,4 +36,5 @@ def formatearActuacion(actuacion):
     actuacion.descripcion = str(actuacion.descripcion).ljust(64, ' ')
     actuacion.cant_hs = str(actuacion.cant_hs).ljust(6, ' ')
     actuacion.gastos = str(actuacion.gastos).ljust(6, ' ')
-    
+
+#----------------------------- CARGAS/ALTAS -----------------------------------------
