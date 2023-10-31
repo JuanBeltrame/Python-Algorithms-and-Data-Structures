@@ -130,80 +130,6 @@ def ordenarSocios():
 #----------------------------- INICIALIZAR ----------------------------------------- 
 
 #----------------------------- CARGAS/ALTAS -----------------------------------------
-
-def grabar (nroA, nroS, fecha, lugar):
-    global ArcLogAvistajes
-    rAvistaje=Avistaje()
-    rAvistaje.nroAve = str(nroA).ljust(5)   #5
-    rAvistaje.nroSocio = str(nroS).ljust(5) #5
-    rAvistaje.fecha = fecha  #12
-    rAvistaje.lugar = lugar  #30
-    ArcLogAvistajes.seek(0,2)
-    pickle.dump(rAvistaje, ArcLogAvistajes)
-    ArcLogAvistajes.flush()
-
-def ActualizarSocio(nS):
-    pos = buscaSocio(nS)
-    ArcLogSocios.seek(pos,0)
-    rSocio = pickle.load(ArcLogSocios)
-    rSocio.cant = str(int(rSocio.cant) + 1).ljust(3)
-    ArcLogSocios.seek(pos,0) ##tengo que volver a pararme adelante del registro a actualizar
-    pickle.dump(rSocio, ArcLogSocios)
-    ArcLogSocios.flush()
-
-def registrarAvistaje():
-    nroAve = int(input('Ingrese nro de Ave: '))
-    if buscaAve(nroAve) == -1:
-        print(" El nro de Ave ingresado NO EXISTE")
-    else: 
-        nroSocio = int(input('Ingrese nro de Socio: '))
-        if buscaSocio(nroSocio) == -1:
-            print(" El número de socio ingresado NO EXISTE")
-
-        else:
-            fecha = validarFecha().ljust(12)
-            lugar = input("Ingrese lugar: ").lower().ljust(30)
-            grabar(nroAve,nroSocio,fecha,lugar)
-            ActualizarSocio(nroSocio)
-            print('Registro grabado exitosamente \n')
-
-def historiaMigratoria():
-    global ArcLogAves, ArcFisiAvistajes,ArcLogAvistajes
-    rAvistaje=Avistaje()
-    rAve= Ave()
-    nroAve = int(input('Ingrese nro de Ave: '))
-    pos= buscaAve(nroAve)
-    if pos == -1:
-        print('nro de Ave NO EXISTE:  ')
-    else:
-        ArcLogAves.seek(pos,0)
-        rAve=pickle.load(ArcLogAves)
-        print('.......Historia migratoria: ',rAve.desc)
-        print("-------------------------------------------------------")
-        print(" Socio      Lugar de avistaje                    Fecha")
-        print("-------------------------------------------------------")
-        ArcLogAvistajes.seek(0,0)
-        t = os.path.getsize(ArcFisiAvistajes)
-        while ArcLogAvistajes.tell() < t:
-            rAvistaje = pickle.load(ArcLogAvistajes)
-            if int(rAvistaje.nroAve) == int(nroAve):
-                print (" ",rAvistaje.nroSocio," ",rAvistaje.lugar," ", rAvistaje.fecha)
-
-def observaciones():
-    global ArcFisiSocios, ArcLogSocios
-    ordenarSocios()
-    cont=0
-    ArcLogSocios.seek(0,0)
-    t = os.path.getsize(ArcFisiSocios)
-    print("--------------------------------------------------------")
-    print(" socio    Nombre               cantidad de observaciones")
-    print("--------------------------------------------------------")
-    while (ArcLogSocios.tell() < t)and cont<=15: 
-        rSocio = pickle.load(ArcLogSocios)
-        print(" ",rSocio.nro, " ",rSocio.nom," ", rSocio.cant)
-        cont=cont+1
-    input()
-
 def CargaSocios():
     global ArcFisiSocios, ArcLogSocios
     os.system("cls")
@@ -262,6 +188,88 @@ def CargaAves():
         while validaRangoEntero(na, 0, 9999):
             na = input("Incorrecto - Entre 1 y 9999 [0 para Volver]: ")
 
+#----------------------------- BAJA LOGICA -----------------------------------------
+
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
+def ActualizarSocio(nS):
+    pos = buscaSocio(nS)
+    ArcLogSocios.seek(pos,0)
+    rSocio = pickle.load(ArcLogSocios)
+    rSocio.cant = str(int(rSocio.cant) + 1).ljust(3)
+    ArcLogSocios.seek(pos,0) ##tengo que volver a pararme adelante del registro a actualizar
+    pickle.dump(rSocio, ArcLogSocios)
+    ArcLogSocios.flush()
+
+
+
+
+
+def grabar (nroA, nroS, fecha, lugar):
+    global ArcLogAvistajes
+    rAvistaje=Avistaje()
+    rAvistaje.nroAve = str(nroA).ljust(5)   #5
+    rAvistaje.nroSocio = str(nroS).ljust(5) #5
+    rAvistaje.fecha = fecha  #12
+    rAvistaje.lugar = lugar  #30
+    ArcLogAvistajes.seek(0,2)
+    pickle.dump(rAvistaje, ArcLogAvistajes)
+    ArcLogAvistajes.flush()
+
+def registrarAvistaje():
+    nroAve = int(input('Ingrese nro de Ave: '))
+    if buscaAve(nroAve) == -1:
+        print(" El nro de Ave ingresado NO EXISTE")
+    else: 
+        nroSocio = int(input('Ingrese nro de Socio: '))
+        if buscaSocio(nroSocio) == -1:
+            print(" El número de socio ingresado NO EXISTE")
+
+        else:
+            fecha = validarFecha().ljust(12)
+            lugar = input("Ingrese lugar: ").lower().ljust(30)
+            grabar(nroAve,nroSocio,fecha,lugar)
+            ActualizarSocio(nroSocio)
+            print('Registro grabado exitosamente \n')
+
+def historiaMigratoria():
+    global ArcLogAves, ArcFisiAvistajes,ArcLogAvistajes
+    rAvistaje=Avistaje()
+    rAve= Ave()
+    nroAve = int(input('Ingrese nro de Ave: '))
+    pos= buscaAve(nroAve)
+    if pos == -1:
+        print('nro de Ave NO EXISTE:  ')
+    else:
+        ArcLogAves.seek(pos,0)
+        rAve=pickle.load(ArcLogAves)
+        print('.......Historia migratoria: ',rAve.desc)
+        print("-------------------------------------------------------")
+        print(" Socio      Lugar de avistaje                    Fecha")
+        print("-------------------------------------------------------")
+        ArcLogAvistajes.seek(0,0)
+        t = os.path.getsize(ArcFisiAvistajes)
+        while ArcLogAvistajes.tell() < t:
+            rAvistaje = pickle.load(ArcLogAvistajes)
+            if int(rAvistaje.nroAve) == int(nroAve):
+                print (" ",rAvistaje.nroSocio," ",rAvistaje.lugar," ", rAvistaje.fecha)
+
+def observaciones():
+    global ArcFisiSocios, ArcLogSocios
+    ordenarSocios()
+    cont=0
+    ArcLogSocios.seek(0,0)
+    t = os.path.getsize(ArcFisiSocios)
+    print("--------------------------------------------------------")
+    print(" socio    Nombre               cantidad de observaciones")
+    print("--------------------------------------------------------")
+    while (ArcLogSocios.tell() < t)and cont<=15: 
+        rSocio = pickle.load(ArcLogSocios)
+        print(" ",rSocio.nro, " ",rSocio.nom," ", rSocio.cant)
+        cont=cont+1
+    input()
+
+
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
 def Pantalla():
     print("")
     print("FINAL AVES")
@@ -273,6 +281,9 @@ def Pantalla():
     print("e - Alta SOCIOS")
     print("f - Salir \n")
 
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
+
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 # programa principal 
 ArcFisiAves = "D:\\AEDD\\aves.dat" 
 ArcFisiAvistajes = "D:\\AEDD\\avistajes.dat" 

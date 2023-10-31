@@ -155,6 +155,14 @@ def pantalla1():
         print(rZona.nro, rZona.nombre)
     print("Fin del listado.")
 
+#----------------------------- BAJA LOGICA -----------------------------------------
+
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
+
+
+
+
+
 #necesitamos esta funcion porque los indices en Python son numericos, no del tipo char
 def nroMes(mes):
     if mes == "D":
@@ -253,18 +261,9 @@ def alquilar():
         while tipo != "C" and tipo != "X" and tipo != "D" and tipo != "*":
             tipo = input('Tipo no valido. Ingrese el tipo de la Propiedad: ').upper()
 
-def listado():
-    global afPropiedades, alPropiedades, afZonas, alZonas
-    alPropiedades.seek(0)
-    tamanio = os.path.getsize(afPropiedades)
-    while alPropiedades.tell() < tamanio:
-        rPropiedad = pickle.load(alPropiedades)
-        nombre = nombreZona(rPropiedad.zona)
-        print(rPropiedad.cod, nombre, rPropiedad.dir)
-        print ("M Q1 Q2")
-        for i in range(3):
-            print(i,rPropiedad.alquilado[i][0],rPropiedad.alquilado[i][1])
 
+
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 def abrir():
     global afPropiedades, alPropiedades, afZonas, alZonas
     afPropiedades = "./propiedades.dat"
@@ -293,6 +292,7 @@ def abrir():
     else:
         alZonas = open(afZonas, "r+b")
 
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
 def mostrarMenu():
     print("ALQUILERES DE VACACIONES")
     print("----------------\n")
@@ -302,6 +302,19 @@ def mostrarMenu():
     print("4 - Listado")
     print("0 - Salir \n\n")
 
+def listado():
+    global afPropiedades, alPropiedades, afZonas, alZonas
+    alPropiedades.seek(0)
+    tamanio = os.path.getsize(afPropiedades)
+    while alPropiedades.tell() < tamanio:
+        rPropiedad = pickle.load(alPropiedades)
+        nombre = nombreZona(rPropiedad.zona)
+        print(rPropiedad.cod, nombre, rPropiedad.dir)
+        print ("M Q1 Q2")
+        for i in range(3):
+            print(i,rPropiedad.alquilado[i][0],rPropiedad.alquilado[i][1])
+
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 def main():
     global afPropiedades, alPropiedades, afZonas, alZonas
     ### Programa principal ###

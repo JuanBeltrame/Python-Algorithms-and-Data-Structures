@@ -35,6 +35,12 @@ def inicializarMediciones():
 
 #----------------------------- CARGAS/ALTAS -----------------------------------------
 
+#----------------------------- BAJA LOGICA -----------------------------------------
+
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
+
+
+
 def calidadAire(snap):
     if (snap <= 50):
         return 'Buena'
@@ -118,6 +124,10 @@ def menu():
         elif opt == 3:
             limpiarTarjeta()
 
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
+
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 afMediciones = "./mediciones.dat"
 alMediciones = open (afMediciones, "w+b")
 

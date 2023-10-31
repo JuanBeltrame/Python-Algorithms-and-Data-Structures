@@ -104,9 +104,9 @@ def altaBoletos(afBoleto, alBoleto):
     cargarBoleto(afBoleto, alBoleto)
     ordenarBoletos(afBoleto, alBoleto)
 
-#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
-
 #----------------------------- BAJA LOGICA -----------------------------------------
+
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
 
 #----------------------------- CALCULOS -----------------------------------------	
 '''

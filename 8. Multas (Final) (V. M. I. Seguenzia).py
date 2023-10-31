@@ -140,33 +140,6 @@ def ordenaMultasxCodigo():  #ordena por campo codigo
 #----------------------------- INICIALIZAR -----------------------------------------
 
 #----------------------------- CARGAS/ALTAS -----------------------------------------
-
-
-def ingresa(cod,vrMul):
-		vrMul.codigo = int(cod)
-		vrMul.patente = input("Patente: ")
-		while len(vrMul.patente)<1 or len(vrMul.patente)>7:
-			vrMul.patente = input("Incorrecto - Patente <hasta 7 caracteres>: ")
-		vrMul.dni = input("dni <hasta 9 caracteres>: ")
-		while len(vrMul.dni)<1 or len(vrMul.dni)>9:
-			vrMul.dni = input("Incorrecto - dni <hasta 9 caracteres>: ")
-		ArcLogTip.seek(0,0)
-		aux=pickle.load(ArcLogTip)
-		tamReg= ArcLogTip.tell()
-		tamArch= os.path.getsize(ArcFisiTip)
-		cantReg= tamArch// tamReg
-		vrMul.tipo=input("Ingrese Número de tipo de Infracción: ")
-		while validaRangoEntero(vrMul.tipo, 1, cantReg):
-			print(" incorrecto...el numero debe ser menos o igual a ", cantReg)
-			vrMul.tipo= input()#"incorrecto...ingrese nuevamente:  ")
-		vrMul.lugar = input("Lugar de la Infracción: ")
-		while len(vrMul.lugar)<1 or len(vrMul.lugar)>30:
-			vrMul.lugar = input("Incorrecto - lugar <hasta 30 caracteres>: ")
-		fv= validarFechaVto()
-		vrMul.fecVto= fv
-		vrMul.grua = validargrua()
-		vrMul.pagado= False
-
 def CargaMulta():
 	global ArcFisiMul, ArcLogMul
 	os.system("cls")
@@ -258,6 +231,35 @@ def CargaTipos():
 		while rta != "S" and rta != "N":
 			rta = input("Por favor, solo S para Si o N para No:").upper()
 
+#----------------------------- BAJA LOGICA -----------------------------------------
+
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
+
+
+def ingresa(cod,vrMul):
+		vrMul.codigo = int(cod)
+		vrMul.patente = input("Patente: ")
+		while len(vrMul.patente)<1 or len(vrMul.patente)>7:
+			vrMul.patente = input("Incorrecto - Patente <hasta 7 caracteres>: ")
+		vrMul.dni = input("dni <hasta 9 caracteres>: ")
+		while len(vrMul.dni)<1 or len(vrMul.dni)>9:
+			vrMul.dni = input("Incorrecto - dni <hasta 9 caracteres>: ")
+		ArcLogTip.seek(0,0)
+		aux=pickle.load(ArcLogTip)
+		tamReg= ArcLogTip.tell()
+		tamArch= os.path.getsize(ArcFisiTip)
+		cantReg= tamArch// tamReg
+		vrMul.tipo=input("Ingrese Número de tipo de Infracción: ")
+		while validaRangoEntero(vrMul.tipo, 1, cantReg):
+			print(" incorrecto...el numero debe ser menos o igual a ", cantReg)
+			vrMul.tipo= input()#"incorrecto...ingrese nuevamente:  ")
+		vrMul.lugar = input("Lugar de la Infracción: ")
+		while len(vrMul.lugar)<1 or len(vrMul.lugar)>30:
+			vrMul.lugar = input("Incorrecto - lugar <hasta 30 caracteres>: ")
+		fv= validarFechaVto()
+		vrMul.fecVto= fv
+		vrMul.grua = validargrua()
+		vrMul.pagado= False
 
 def Calculo(ti,gr):
 	global ArcFisiTip, ArcLogTip
@@ -290,27 +292,6 @@ def Proceso(dp):
 			
 	print("Ud. debe abonar un total de $ ",total)
 	input()
-
-def Consulta():
-	global ArcFisiMul, ArcLogMul
-	global ArcFisiTip, ArcLogTip
-	os.system("cls")
-	print("OPCION 3 - CONSULTA ")
-	print("----------------------------\n")
-	
-	rta= input("desea Consulta por DNI ó por PATENTE? ingrese D ó P: ").upper()
-	while rta != "D" and rta != "P":
-		rta = input("Por favor, ingrese D-Dni ó P-Patente:").upper()
-	if rta=='D':
-		doc= input("Ingrese numero de Dni hasta 8 caracteres: ")
-		while len(doc)<1 or len(doc)>8:
-			doc = input("Incorrecto - dni <hasta 8 caracteres>: ")
-		Proceso(doc)
-	else:
-		pat= input("Ingrese numero de Patente hasta 6 caracteres: ")
-		while len(pat)<1 or len(pat)>6:
-			pat = input("Incorrecto - patente  <hasta 6 caracteres>: ")
-		Proceso(pat)
 
 def Pagos():
 	global ArcFisiMul, ArcLogMul
@@ -351,6 +332,42 @@ def Pagos():
 				print(" Pago exitoso!")
 		else:
 			print(" la multa ya está paga!!")
+
+def pantalla():
+    print('Menu de opciones');
+    print('-----------------');
+    print()
+    print('1-Carga Tipos de Infracción')
+    print('2-Carga Multas')
+    print('3-Consulta X Dni ó X Patente')
+    print('4-Pagos')
+    print('5-Listado')
+    print('6-Listado de tipos de Infracción')
+    print('7-Listado de todas las multas cargadas')
+    print('8-Salir')
+    print()
+
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
+def Consulta():
+	global ArcFisiMul, ArcLogMul
+	global ArcFisiTip, ArcLogTip
+	os.system("cls")
+	print("OPCION 3 - CONSULTA ")
+	print("----------------------------\n")
+	
+	rta= input("desea Consulta por DNI ó por PATENTE? ingrese D ó P: ").upper()
+	while rta != "D" and rta != "P":
+		rta = input("Por favor, ingrese D-Dni ó P-Patente:").upper()
+	if rta=='D':
+		doc= input("Ingrese numero de Dni hasta 8 caracteres: ")
+		while len(doc)<1 or len(doc)>8:
+			doc = input("Incorrecto - dni <hasta 8 caracteres>: ")
+		Proceso(doc)
+	else:
+		pat= input("Ingrese numero de Patente hasta 6 caracteres: ")
+		while len(pat)<1 or len(pat)>6:
+			pat = input("Incorrecto - patente  <hasta 6 caracteres>: ")
+		Proceso(pat)
 
 def Listado():
 	global ArcFisiMul, ArcLogMul
@@ -410,22 +427,9 @@ def ListadoMultas():
 		print(RegMul.codigo,"  ",RegMul.tipo,"  ",RegMul.dni," ",RegMul.patente," ",RegMul.fecVto," ",RegMul.grua," ",RegMul.fecPago )
 	input()
 
-def pantalla():
-    print('Menu de opciones');
-    print('-----------------');
-    print()
-    print('1-Carga Tipos de Infracción')
-    print('2-Carga Multas')
-    print('3-Consulta X Dni ó X Patente')
-    print('4-Pagos')
-    print('5-Listado')
-    print('6-Listado de tipos de Infracción')
-    print('7-Listado de todas las multas cargadas')
-    print('8-Salir')
-    print()
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 
-
-### Programa Principal ###
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 ArcFisiMul = "D:\\AEDD\\multas.dat"  
 ArcFisiTip = "D:\\AEDD\\tipos.dat"
 if not os.path.exists(ArcFisiMul):   

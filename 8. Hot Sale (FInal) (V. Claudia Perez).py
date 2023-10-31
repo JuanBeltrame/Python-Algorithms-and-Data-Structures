@@ -92,24 +92,15 @@ def busecp(CodProd):
 #----------------------------- INICIALIZAR -----------------------------------------
 
 #----------------------------- CARGAS/ALTAS -----------------------------------------
-def muestrop(pr):
-	if pr.stock==0:
-		print(pr.codp," ",pr.descp," ",pr.precio," ",pr.precioLiq)
-		print(" ")
 
-def listadostockcero():
-	finprod=os.path.getsize(afprod)
-	if finprod==0:
-		print("No hay productos a mostrar")
-		os.system("pause")
-	else:
-		print("Listado de productos con stock cero ")
-		print("")
-		aprod.seek(0,0)
-		while aprod.tell() < finprod:
-			rp=pickle.load(aprod)
-			muestrop(rp)
-	os.system("pause")
+#----------------------------- BAJA LOGICA -----------------------------------------
+
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
+
+
+
+
+
 
 def mayempresa():
 	global aemp
@@ -279,12 +270,34 @@ def menu():
 		while (validaRangoEntero(opcion, 0, 3)):
 			opcion = input("Invalida - Seleccionar opcion: ")
 
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
+def listadostockcero():
+	finprod=os.path.getsize(afprod)
+	if finprod==0:
+		print("No hay productos a mostrar")
+		os.system("pause")
+	else:
+		print("Listado de productos con stock cero ")
+		print("")
+		aprod.seek(0,0)
+		while aprod.tell() < finprod:
+			rp=pickle.load(aprod)
+			muestrop(rp)
+	os.system("pause")
+
+def muestrop(pr):
+	if pr.stock==0:
+		print(pr.codp," ",pr.descp," ",pr.precio," ",pr.precioLiq)
+		print(" ")
+
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 # programa principal
 global aemp, aprod
 global afemp, afprod
 re=empresa()
 rp=producto()
 
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 afemp="c:\\ayed\\empresa.dat"
 if os.path.exists(afemp)==True:
 	aemp=open(afemp,"r+b")

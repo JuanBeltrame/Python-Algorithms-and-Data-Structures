@@ -110,21 +110,6 @@ def buscarAlquiler(numero):
 #----------------------------- INICIALIZAR ----------------------------------------- 
 
 #----------------------------- CARGAS/ALTAS -----------------------------------------
-
-
-def mostrarDisfraz(d): 
-	print("Número:", d.numero,"  Descripción:", d.descripcion.strip()) 
-	print("Precio Temporada baja día hábil: ", d.precio[0][0], "Precio Temporada baja día no hábil: ", d.precio[0][1])
-	print("Precio Temporada alta día hábil: ", d.precio[1][0], "Precio Temporada alta día no hábil: ", d.precio[1][1])
-	if d.baja == False:
-		print("Para alquilar")
-	elif d.baja == True:
-		print("Discontinuado", end='\n')
-	if d.disponibilidad == True:
-		print("Disponible")
-	elif d.disponibilidad == False:
-		print("Alquilado")
-
 def cargarDisfraz():
 	global arLoDisfraz
 	d = Disfraz()	#Se asigna a la variable de que sea del tipo Disfraz
@@ -190,39 +175,9 @@ def crearDisfraz():
 	print()
 	cargarDisfraz()
 
-def deshabilitarDisfraz():
-	global arLoDisfraz
-	d = Disfraz()
-	os.system("cls")
-	print("BAJA LÓGICA DE UN DISFRAZ\n")
-	num = input("Ingresa el código del nuevo disfraz, entre 1 y 99999 [0 para Volver]: ")
-	while not validarIngresoEntero(num,0,99999):
-		num = input("Ingresar código nuevamente: ")
-	num = int(num)
-	if num != 0:
-		
-		pos = buscarDisfraz(num)   	#invoca la función buscarDisfraz para obtener la posición
-									#donde comienza el registro
-		if pos == -1:				#si no se encontró el Disfraz
-			print("El disfraz no existe")
-		else:
-			arLoDisfraz.seek(pos, 0)		#Ubico el punto en la posición donde comienza el registro
-			d = pickle.load(arLoDisfraz)	#Carlo el registro en memoria
-			print("Disfraz a dar de baja:")
-			mostrarDisfraz(d)
-			d.baja = True	
-			rpta = input("Confirma? (S o N): ")
-			while rpta.upper() != "S" and rpta.upper() != "N":
-				rpta = input("Incorrecto - Confirma? (S o N): ")
-			if rpta.upper() == "S":
-				arLoDisfraz.seek(pos, 0)
-				pickle.dump(d, arLoDisfraz)
-				arLoDisfraz.flush()
-				print("Eliminación exitosa")
-				print("El disfraz eliminado es: ")
-				mostrarDisfraz(d)
-		os.system("pause")
+#----------------------------- BAJA LOGICA -----------------------------------------
 
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
 def actualizarPrecios():
 	global arLoDisfraz
 	d = Disfraz()
@@ -273,18 +228,41 @@ def actualizarPrecios():
 				mostrarDisfraz(d)
 		os.system("pause")
 
-def listar():
-	global arLoDisfraz
-	global arFiDisfraz
-	t = os.path.getsize(arFiDisfraz)
-	arLoDisfraz.seek(0, 0)
-	while arLoDisfraz.tell()<t:
-		d = pickle.load(arLoDisfraz)
-		if d.baja == False:
-			mostrarDisfraz(d)
 
-	print("---------------------------------------------------")
-	input("Toque una tecla para continuar...")
+
+
+def deshabilitarDisfraz():
+	global arLoDisfraz
+	d = Disfraz()
+	os.system("cls")
+	print("BAJA LÓGICA DE UN DISFRAZ\n")
+	num = input("Ingresa el código del nuevo disfraz, entre 1 y 99999 [0 para Volver]: ")
+	while not validarIngresoEntero(num,0,99999):
+		num = input("Ingresar código nuevamente: ")
+	num = int(num)
+	if num != 0:
+		
+		pos = buscarDisfraz(num)   	#invoca la función buscarDisfraz para obtener la posición
+									#donde comienza el registro
+		if pos == -1:				#si no se encontró el Disfraz
+			print("El disfraz no existe")
+		else:
+			arLoDisfraz.seek(pos, 0)		#Ubico el punto en la posición donde comienza el registro
+			d = pickle.load(arLoDisfraz)	#Carlo el registro en memoria
+			print("Disfraz a dar de baja:")
+			mostrarDisfraz(d)
+			d.baja = True	
+			rpta = input("Confirma? (S o N): ")
+			while rpta.upper() != "S" and rpta.upper() != "N":
+				rpta = input("Incorrecto - Confirma? (S o N): ")
+			if rpta.upper() == "S":
+				arLoDisfraz.seek(pos, 0)
+				pickle.dump(d, arLoDisfraz)
+				arLoDisfraz.flush()
+				print("Eliminación exitosa")
+				print("El disfraz eliminado es: ")
+				mostrarDisfraz(d)
+		os.system("pause")
 
 def alquilar():
 	global arLoDisfraz
@@ -385,6 +363,32 @@ def crearReclamos():
 				continue
 			break
 """
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
+def listar():
+	global arLoDisfraz
+	global arFiDisfraz
+	t = os.path.getsize(arFiDisfraz)
+	arLoDisfraz.seek(0, 0)
+	while arLoDisfraz.tell()<t:
+		d = pickle.load(arLoDisfraz)
+		if d.baja == False:
+			mostrarDisfraz(d)
+
+	print("---------------------------------------------------")
+	input("Toque una tecla para continuar...")
+
+def mostrarDisfraz(d): 
+	print("Número:", d.numero,"  Descripción:", d.descripcion.strip()) 
+	print("Precio Temporada baja día hábil: ", d.precio[0][0], "Precio Temporada baja día no hábil: ", d.precio[0][1])
+	print("Precio Temporada alta día hábil: ", d.precio[1][0], "Precio Temporada alta día no hábil: ", d.precio[1][1])
+	if d.baja == False:
+		print("Para alquilar")
+	elif d.baja == True:
+		print("Discontinuado", end='\n')
+	if d.disponibilidad == True:
+		print("Disponible")
+	elif d.disponibilidad == False:
+		print("Alquilado")
 
 #Menú de opciones iterativo
 def menu():
@@ -467,6 +471,9 @@ global arLoAlquiler
 validarArchivoDisfraz()
 validarArchivoAlquiler()
 
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
+
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 menu()
 arLoDisfraz.close()
 arLoAlquiler.close()

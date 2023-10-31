@@ -129,6 +129,10 @@ def inicializarZonas():
 
 #----------------------------- CARGAS/ALTAS -----------------------------------------
 
+#----------------------------- BAJA LOGICA -----------------------------------------
+
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
+
 
 
 
@@ -251,7 +255,10 @@ def menuPrincipal():
             cosecha()
         elif opt == 3:
             inactivas()
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
 
+
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 vrColmena = Colmena()
 arProduccion = [
                 'Miel', 
@@ -260,6 +267,7 @@ arProduccion = [
                 'Polen'
             ]
 
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 afColmenas = "./colmenas.dat"
 if not os.path.exists(afColmenas):
     alColmenas = open (afColmenas, "w+b")

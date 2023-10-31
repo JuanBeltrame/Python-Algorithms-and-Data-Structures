@@ -63,15 +63,20 @@ def busecp(CodProd):
 
 #----------------------------- CARGAS/ALTAS -----------------------------------------
 
+#----------------------------- BAJA LOGICA -----------------------------------------
 
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
 
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
 
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 # programa principal
 global aemp, aprod
 global afemp, afprod
 re=empresa()
 rp=producto()
 
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 afemp="c:\\ayed\\empresa.dat"
 if os.path.exists(afemp)==True:
 	aemp=open(afemp,"r+b")

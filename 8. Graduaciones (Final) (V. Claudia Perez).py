@@ -116,6 +116,23 @@ def Cargasalones():
 	print("**GRACIAS POR INGRESAR LOS DATOS DE SALONES Y VALOR DE ENTRADA**")
 	os.system("cls")
 
+#----------------------------- BAJA LOGICA -----------------------------------------
+
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
+def actualizar(r, p):
+	global ala
+	global afa
+	r.pago="S"
+	r.emitido="S"
+	r.nya=r.nya.ljust(30," ")
+	r.dni=r.dni.ljust(8," ")
+	ala.seek(p,0)
+	pickle.dump(r,ala)
+	ala.flush()
+	print(" Actualizado con exito ")
+	input()
+
+
 
 # CREACIÓN Y APERTURA DE ARCHIVOS
 def Asignar():
@@ -134,24 +151,7 @@ def Asignar():
 	else:
 		alg=open(afg,"w+b")
 
-def Consultas():
-	global alg
-	global afg
-	Tamarch=os.path.getsize(afg)
-	if Tamarch==0:
-		print("Archivo vacio")
-	else:
-		alg.seek(0,0)
-		rg=pickle.load(alg)
-		tamregG=alg.tell()
-		print("**** CONSULTAS ****")
-		print("")
-		print("Codigo   Nombre de salon Valor graduado valor cena valor brindis")
-		while alg.tell() < Tamarch:
-			rg=pickle.load(alg)
-			print(int(alg.tell()-tamregG)," ",rg.noms," ",rg.valor[0]," ",rg.valor[1]," ",rg.valor[2])
-			print("")
-			input()
+
 
 # Genera y formatea el registro de asistentes para luego inscribirlo (grabar en archivo)
 def armorega(r, d, c):
@@ -267,18 +267,7 @@ def emisión(d,nomap, salon,desc):
 	print()
 	input()
 # formatea el registro y actualiza el archivo de asistentes registrando el pago y la emisión de la entrada
-def actualizar(r, p):
-	global ala
-	global afa
-	r.pago="S"
-	r.emitido="S"
-	r.nya=r.nya.ljust(30," ")
-	r.dni=r.dni.ljust(8," ")
-	ala.seek(p,0)
-	pickle.dump(r,ala)
-	ala.flush()
-	print(" Actualizado con exito ")
-	input()
+
 
 # Proceso de pago y emision con busqueda directa (por posición relativa a registro) en Graduaciones
 def Pagoyemisión():
@@ -323,6 +312,26 @@ def Pagoyemisión():
 				input()
 		dni=input("Ingrese dni / 0 para salir ")
 
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
+def Consultas():
+	global alg
+	global afg
+	Tamarch=os.path.getsize(afg)
+	if Tamarch==0:
+		print("Archivo vacio")
+	else:
+		alg.seek(0,0)
+		rg=pickle.load(alg)
+		tamregG=alg.tell()
+		print("**** CONSULTAS ****")
+		print("")
+		print("Codigo   Nombre de salon Valor graduado valor cena valor brindis")
+		while alg.tell() < Tamarch:
+			rg=pickle.load(alg)
+			print(int(alg.tell()-tamregG)," ",rg.noms," ",rg.valor[0]," ",rg.valor[1]," ",rg.valor[2])
+			print("")
+			input()
+			
 def Menu():
 	global ala
 	global afa
@@ -379,6 +388,10 @@ def Menu():
 			opcion = input("Invalida - Seleccionar opcion: ")"""
 		while validaRangoEntero(opcion,0,5):
 			opcion = input(" Invalida  / Seleccionar opcion: ")
+
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
+
+#----------------------------- APERTURA DE ARCHIVOS -----------------------------------------
 
 # Programa principal
 Asignar()

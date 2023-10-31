@@ -95,8 +95,8 @@ def iden():
 
 
 
-#----------------------------------------------------------------------
-# Main Program
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
+
 aFc = "./Python/Archivos/Banco_Clientes.dat"
 aFs = "./Python/Archivos/Banco_Saldo.dat"
 if not os.path.exists(aFc):

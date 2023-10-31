@@ -279,9 +279,10 @@ def altadescarte(c):
 	print(d.nl," ",d.vr)
 	tec=input()
 
+#----------------------------- BAJA LOGICA -----------------------------------------
+
 #----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
 
-#----------------------------- BAJA LOGICA -----------------------------------------
 
 #----------------------------- CALCULOS -----------------------------------------	
 # Procedimiento que calcula los promedios pedidos en enunciado con los valores de prueba	

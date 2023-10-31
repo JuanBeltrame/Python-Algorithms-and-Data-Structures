@@ -115,18 +115,7 @@ def ordenarPorMedalla():
 
 #----------------------------- INICIALIZAR -----------------------------------------
 
-
-def mostrarPais(p):
-    print("Codigo:", p.codigo, "  Nombre del Pais:", p.nombre.strip())
-
-
-def mostrarPaisCompleto(p):
-    print("Codigo:", p.codigo, "  Nombre del Pais:", p.nombre.strip(),
-          "Medallas de Oro: ", p.cantMedellas[0], "Medallas de Plata: ", p.cantMedellas[1], "Medallas de Bronce: ", p.cantMedellas[2])
-
-
-
-
+#----------------------------- CARGAS/ALTAS -----------------------------------------
 def cargarPais():
     global arLoPais
     p = Pais()
@@ -154,6 +143,30 @@ def cargarPais():
             cod = input("Por favor, un número entero entre 0 y 999: ")
         cod = int(cod)
 
+def cargarParticipantes():
+    global arFiPuntaje
+    global arLoPuntaje
+    global arFiPais
+    if os.path.getsize(arFiPais) == 0:
+        print("Primero debe dar de alta los paises")
+        input("Precione una tecla para continuar")
+    else:
+        os.system("cls")
+        print("INGRESO DE PARTICIPANTES \n")
+        t = os.path.getsize(arFiPuntaje)
+        if t == 0:
+            print("Aun no hay participantes registrados")
+        else:
+            print("Lista de Participantes")
+            print("--------------------------")
+            arLoPuntaje.seek(0, 0)
+            while arLoPuntaje.tell() < t:
+                pun = pickle.load(arLoPuntaje)
+                print(pun.codigo_pais)
+                mostrarParticipantes(pun)
+                print("-----------------------------------------------------------------")
+        print()
+        registrarPuntajes()
 
 def crearPais():
     global arFiPais
@@ -175,7 +188,7 @@ def crearPais():
     print()
     cargarPais()
 
-
+#----------------------------- BAJA LOGICA -----------------------------------------
 def eliminarPais():
     global arLoPais
     p = Pais()
@@ -208,25 +221,7 @@ def eliminarPais():
                 mostrarPais(p)
         os.system("pause")
 
-
-def listarPaises():
-    global arLoPais
-    global arFiPais
-    p = Pais()
-    t = os.path.getsize(arFiPais)
-    if t == 0:
-        print("No hay pais registrados")
-    else:
-        arLoPais.seek(0, 0)
-        while arLoPais.tell() < t:
-            p = pickle.load(arLoPais)
-            if not p.baja:
-                mostrarPais(p)
-
-    print("---------------------------------------------------")
-    input("Toque una tecla para continuar...")
-
-
+#----------------------------- MODIFICAR/ACTUALIZAR un campo -----------------------------------------
 def editarPais():
     global arLoPais
     p = Pais()
@@ -262,7 +257,6 @@ def editarPais():
                 mostrarPais(p)
         os.system("pause")
 
-
 def ejecutarCase_2(accion):
     if accion == "A":
         crearPais()
@@ -273,41 +267,16 @@ def ejecutarCase_2(accion):
     elif accion == "M":
         editarPais()
 
-
-def mostrarMenuPaises():
-    os.system("cls")
-    print("A - ALTA")
-    print("B – BAJA")
-    print("C – CONSULTA")
-    print("M – MODIFICACION")
-    print("V – VOLVER")
-
-
-def mostrarOpciones():
-    os.system("cls")
-    print("1- CARGAR RESULATODOS DE PARTICIPANTES")
-    print("2 – ARMAR EL PODIO")
-    print("3 – MOSTRAR EL MEDALLERO")
-    print("4 – EXTRA!! ADMINISTRAR PAISES (En chapin no hay que realizarlo")
-    print("0 – Fin del programa")
-
-
 def seleccionarAccion():
     opcionABM = input("Ingrese la opción deseada: ").upper()
     while opcionABM != "A" and opcionABM != "B" and opcionABM != "C" and opcionABM != "M" and opcionABM != "V":
         opcionABM = input("Ingrese una opción correcta: ").upper()
     return opcionABM
 
-
 def administrarPaises():
     mostrarMenuPaises()
     abm = seleccionarAccion()
     ejecutarCase_2(abm)
-
-
-def salir():
-    print("Muchas gracias por usar nuestro sistema")
-
 
 def registrarPuntajes():
     global arLoPuntaje
@@ -368,47 +337,6 @@ def registrarPuntajes():
         while rta != "S" and rta != "N":
             rta = input("Por favor ingrese (S / N): ").upper()
 
-
-def mostrarParticipantes(pun):
-    global arLoPuntaje
-    global arLoPuntaje
-    global arLoPais
-    paisPos = buscarPais(pun.codigo_pais)
-    arLoPais.seek(paisPos, 0)
-    pais = pickle.load(arLoPais)
-    print("Nombre Participante:", pun.nomPartic, "  Nombre Pais:", pais.nombre.strip(), "  Categoria:",
-          pun.categoria, "Puntaje Total", pun.puntaje_final)
-
-
-def cargarParticipantes():
-    global arFiPuntaje
-    global arLoPuntaje
-    global arFiPais
-    if os.path.getsize(arFiPais) == 0:
-        print("Primero debe dar de alta los paises")
-        input("Precione una tecla para continuar")
-    else:
-        os.system("cls")
-        print("INGRESO DE PARTICIPANTES \n")
-        t = os.path.getsize(arFiPuntaje)
-        if t == 0:
-            print("Aun no hay participantes registrados")
-        else:
-            print("Lista de Participantes")
-            print("--------------------------")
-            arLoPuntaje.seek(0, 0)
-            while arLoPuntaje.tell() < t:
-                pun = pickle.load(arLoPuntaje)
-                print(pun.codigo_pais)
-                mostrarParticipantes(pun)
-                print("-----------------------------------------------------------------")
-        print()
-        registrarPuntajes()
-
-
-
-
-
 def armarPodio():
     global arFiPuntaje
     global arLoPuntaje
@@ -454,21 +382,6 @@ def armarPodio():
             pun = pickle.load(arLoPuntaje)
     input("Tocar tecla para continuar...")
 
-
-
-
-
-def mostrarMedallero():
-    global arLoPais
-    global arFiPais
-    ordenarPorMedalla()
-    t = os.path.getsize(arFiPais)
-    arLoPais.seek(0, 0)
-    while t > arLoPais.tell():
-        pais = pickle.load(arLoPais)
-        mostrarPaisCompleto(pais)
-    input("Tecla para coninuar...")
-
 def ejecutarCase(o):
     if o == 1:
         cargarParticipantes()
@@ -480,7 +393,6 @@ def ejecutarCase(o):
         administrarPaises()
     if o == 0:
         salir()
-
 
 def menu():
     mostrarOpciones()
@@ -497,6 +409,71 @@ def menu():
         opcion = int(opcion)
         ejecutarCase(opcion)
 
+#----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
+def listarPaises():
+    global arLoPais
+    global arFiPais
+    p = Pais()
+    t = os.path.getsize(arFiPais)
+    if t == 0:
+        print("No hay pais registrados")
+    else:
+        arLoPais.seek(0, 0)
+        while arLoPais.tell() < t:
+            p = pickle.load(arLoPais)
+            if not p.baja:
+                mostrarPais(p)
+
+    print("---------------------------------------------------")
+    input("Toque una tecla para continuar...")
+
+def mostrarMedallero():
+    global arLoPais
+    global arFiPais
+    ordenarPorMedalla()
+    t = os.path.getsize(arFiPais)
+    arLoPais.seek(0, 0)
+    while t > arLoPais.tell():
+        pais = pickle.load(arLoPais)
+        mostrarPaisCompleto(pais)
+    input("Tecla para coninuar...")
+
+def mostrarParticipantes(pun):
+    global arLoPuntaje
+    global arLoPuntaje
+    global arLoPais
+    paisPos = buscarPais(pun.codigo_pais)
+    arLoPais.seek(paisPos, 0)
+    pais = pickle.load(arLoPais)
+    print("Nombre Participante:", pun.nomPartic, "  Nombre Pais:", pais.nombre.strip(), "  Categoria:",
+          pun.categoria, "Puntaje Total", pun.puntaje_final)
+
+def mostrarMenuPaises():
+    os.system("cls")
+    print("A - ALTA")
+    print("B – BAJA")
+    print("C – CONSULTA")
+    print("M – MODIFICACION")
+    print("V – VOLVER")
+
+def mostrarOpciones():
+    os.system("cls")
+    print("1- CARGAR RESULATODOS DE PARTICIPANTES")
+    print("2 – ARMAR EL PODIO")
+    print("3 – MOSTRAR EL MEDALLERO")
+    print("4 – EXTRA!! ADMINISTRAR PAISES (En chapin no hay que realizarlo")
+    print("0 – Fin del programa")
+
+def mostrarPais(p):
+    print("Codigo:", p.codigo, "  Nombre del Pais:", p.nombre.strip())
+
+def mostrarPaisCompleto(p):
+    print("Codigo:", p.codigo, "  Nombre del Pais:", p.nombre.strip(),
+          "Medallas de Oro: ", p.cantMedellas[0], "Medallas de Plata: ", p.cantMedellas[1], "Medallas de Bronce: ", p.cantMedellas[2])
+
+def salir():
+    print("Muchas gracias por usar nuestro sistema")
+#----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 #Acá comienza el programa principal
 global arFiPais
 global arLoPais
