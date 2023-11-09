@@ -17,6 +17,7 @@ Determinar si son las longitudes de los lados de un triángulo:
 Recordar que en todo triangulo cada lado es menor o igual que la suma de los
 otros dos y menor que su diferencia (basta mostrarlo para un lado). 
 En caso afirmativo, informar si el mismo es:
+
 equilátero (3 lados iguales), 
 isósceles (2 lados iguales) o
 escaleno (3 lados distintos).
