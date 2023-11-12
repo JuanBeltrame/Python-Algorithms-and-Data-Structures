@@ -333,19 +333,6 @@ def Pagos():
 		else:
 			print(" la multa ya está paga!!")
 
-def pantalla():
-    print('Menu de opciones');
-    print('-----------------');
-    print()
-    print('1-Carga Tipos de Infracción')
-    print('2-Carga Multas')
-    print('3-Consulta X Dni ó X Patente')
-    print('4-Pagos')
-    print('5-Listado')
-    print('6-Listado de tipos de Infracción')
-    print('7-Listado de todas las multas cargadas')
-    print('8-Salir')
-    print()
 
 #----------------------------- CONSULTA DE UN REGISTRO / LISTAR / MOSTRAR -----------------------------------------
 def Consulta():
@@ -426,6 +413,20 @@ def ListadoMultas():
 		RegMul = pickle.load(ArcLogMul)
 		print(RegMul.codigo,"  ",RegMul.tipo,"  ",RegMul.dni," ",RegMul.patente," ",RegMul.fecVto," ",RegMul.grua," ",RegMul.fecPago )
 	input()
+
+def pantalla():
+    print('Menu de opciones');
+    print('-----------------');
+    print()
+    print('1-Carga Tipos de Infracción')
+    print('2-Carga Multas')
+    print('3-Consulta X Dni ó X Patente')
+    print('4-Pagos')
+    print('5-Listado')
+    print('6-Listado de tipos de Infracción')
+    print('7-Listado de todas las multas cargadas')
+    print('8-Salir')
+    print()
 
 #----------------------------- PROGRAMA PRINCIPAL -----------------------------------------
 
